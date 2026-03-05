@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
-        //
+        //constants , theme , network , errors , utils , widgets , routing
         // TRY THIS: Try running your application with "flutter run". You'll see
         // the application has a purple toolbar. Then, without quitting the app,
         // try changing the seedColor in the colorScheme below to Colors.green
@@ -120,3 +120,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+// 1- add package flutter_launcher_icons in pubspec.yaml dev_dependencies
+// icons app logo
+// 2- go ios:
+//    add image icon in assets say icon-launcher.png
+// 3- app Android:
+//    go to web page romannurik.github.io
+//    download icon app
+//    add icon in assets say play-store-icon-launcher.png
+
+// write in pubspec.yaml part of dev_dependencies
+// flutter_icons:
+//   android: true
+//   ios: true
+//   image_path: "assets/icons/icon-launcher.png"
+//   adaptive_icon_background: "#5F33E1"
+//   adaptive_icon_foreground: "assets/icons/play-store-icon-launcher.png"
+
+// final run this
+// flutter pub get
+// flutter pub run flutter_launcher_icons:main
