@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: TextButton(
                 onPressed: () {
                   setState(() {
-                    _currentPage = length - 1;
+                    Navigator.pushNamed(context, AppRoutes.intro);
                   });
                 },
                 child: Text(
@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 40,
+                spacing: 30,
                 children: [
                   Image.asset(item.image, height: 290),
                   Row(
@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Text(
                     item.body,
                     style: AppTextStyles.regular16.copyWith(
-                      color: AppColors.whiteColor,
+                      color: AppColors.lightGrey,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -128,8 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       setState(() {
                         _currentPage++;
                       });
-                    }
-                    if (_currentPage == length - 1) {
+                    } else {
                       Navigator.pushNamed(context, AppRoutes.intro);
                     }
                   },

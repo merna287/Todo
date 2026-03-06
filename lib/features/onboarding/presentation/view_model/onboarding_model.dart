@@ -22,13 +22,13 @@ class OnboardingViewModel {
     ),
     OnboardingModel(
       image: Assets.assetsImagesOnboarding2,
-      title: AppStrings.manageYourTasks,
-      body: AppStrings.youCanEasily,
+      title: AppStrings.createDailyRoutine,
+      body: AppStrings.inUptodo,
     ),
     OnboardingModel(
       image: Assets.assetsImagesOnboarding3,
-      title: AppStrings.manageYourTasks,
-      body: AppStrings.youCanEasily,
+      title: AppStrings.orgonaizeYourTasks,
+      body: AppStrings.youCanOrganize,
     ),
   ];
 }
