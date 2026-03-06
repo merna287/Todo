@@ -7,10 +7,12 @@ class AppStrings {
   static const String register = "Register";
   static const String username = "Username";
   static const String password = "Password";
+  static const String getStarted = "Get Started";
   static const String confirmPassword = "Confirm Password";
   static const String doMathHomeWork = "Do math homework";
   static const String doNotHave = "Don’t have an account? ";
   static const String enterYourUsername = "Enter your Username";
+  static const String welcomeToUpTodo = "Welcome to UpTodo";
   static const String createAccount = "Create account";
   static const String manageYourTasks = "Manage your tasks";
   static const String youCanEasily =
