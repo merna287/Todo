@@ -13,7 +13,7 @@ class TextFormFieldWidget extends StatefulWidget {
     this.hint,
     this.obscureText = false,
     this.isPassword = false,
-    this.widthBorder = 1.0,
+    this.widthBorder = 1.2,
     this.prefixIcon,
     this.fillColor,
   });

@@ -138,13 +138,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Text.rich(
                       TextSpan(
                         text: AppStrings.alreadyHaveAnAccount,
-                        style: AppTextStyles.regular14.copyWith(
+                        style: AppTextStyles.regular16.copyWith(
                           color: AppColors.mediumGrey,
                         ),
                         children: [
                           TextSpan(
                             text: AppStrings.login,
-                            style: AppTextStyles.regular14.copyWith(
+                            style: AppTextStyles.regular16.copyWith(
                               color: AppColors.deepPurple,
                             ),
                           ),

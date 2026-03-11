@@ -109,14 +109,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text.rich(
                       TextSpan(
                         text: AppStrings.doNotHave,
-                        style: AppTextStyles.regular14.copyWith(
+                        style: AppTextStyles.regular16.copyWith(
                           color: AppColors.mediumGrey,
                         ),
                         children: [
                           TextSpan(
                             text: AppStrings.register,
-                            style: AppTextStyles.regular14.copyWith(
-                              color: AppColors.deepPurple,
+                            style: AppTextStyles.regular16.copyWith(
+                              color: AppColors.deepPurple
                             ),
                           ),
                         ],
@@ -144,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
       passwordController.text.trim(),
     );
 
+    if (!mounted) return;
     AppDialogs.hideLoading(context);
     _isRequestRunning = false;
 
