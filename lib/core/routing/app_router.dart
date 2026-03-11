@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/features/auth/presentation/view/login_screem.dart';
+import 'package:todo/features/auth/presentation/view/register_screen.dart';
 import 'package:todo/features/onboarding/presentation/screens/intro_screen.dart';
 
 class AppRoutes {
@@ -11,5 +13,7 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> routes = {
     intro: (context) => const IntroScreen(),
+    login: (context) => const LoginScreen(),
+    register: (context) => const RegisterScreen()
   };
 }

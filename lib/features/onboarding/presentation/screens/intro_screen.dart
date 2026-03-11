@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:todo/core/constants/app_assets.dart';
 import 'package:todo/core/constants/app_strings.dart';
+import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/widgets/buttons.dart';
@@ -64,7 +65,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     horizontal: 24,
                     vertical: 15,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.login);
+                  },
                 ),
               ),
               const SizedBox(height: 16),
@@ -83,6 +86,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     horizontal: 24,
                     vertical: 15,
                   ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.register);
+                  },
                 ),
               ),
               SizedBox(height: 40,)

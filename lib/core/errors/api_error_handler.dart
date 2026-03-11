@@ -18,6 +18,7 @@ Future<Result<T>> safeApiCall<T>(Future<T> Function() call) async {
   } on FormatException {
     return ErrorAPI<T>(const ParsingFailure());
   } catch (e) {
+    if (e is Failure) return ErrorAPI<T>(e);
     return ErrorAPI<T>(UnknownFailure(e.toString()));
   }
 }

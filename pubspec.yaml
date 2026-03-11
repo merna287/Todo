@@ -37,6 +37,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   toastification: ^3.0.3
   flutter_svg: ^2.2.3
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
