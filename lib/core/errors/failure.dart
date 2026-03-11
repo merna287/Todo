@@ -9,12 +9,16 @@ class NetworkFailure extends Failure {
 
 class ServerFailure extends Failure {
   const ServerFailure({this.statusCode, String message = 'Server error'})
-    : super(message);
+      : super(message);
   final int? statusCode;
 }
 
 class ParsingFailure extends Failure {
   const ParsingFailure([super.message = 'Failed to parse response']);
+}
+
+class AuthFailure extends Failure {
+  AuthFailure() : super("Email or password is incorrect");
 }
 
 class UnknownFailure extends Failure {
@@ -23,12 +27,13 @@ class UnknownFailure extends Failure {
 
 extension FailureMessage on Failure {
   String get userMessage => switch (this) {
-    NetworkFailure() => 'Please check your internet connection',
-    ServerFailure(statusCode: 404) => 'Content not found',
-    ServerFailure(statusCode: 500) =>
-      'Server is having issues, try again later',
-    ServerFailure() => 'Something went wrong on the server',
-    ParsingFailure() => 'Unexpected response format',
-    UnknownFailure() => message,
-  };
+        NetworkFailure() => 'Please check your internet connection',
+        ServerFailure(statusCode: 404) => 'Content not found',
+        ServerFailure(statusCode: 500) =>
+            'Server is having issues, try again later',
+        ServerFailure() => 'Something went wrong on the server',
+        ParsingFailure() => 'Unexpected response format',
+        AuthFailure() => message,
+        UnknownFailure() => message,
+      };
 }
