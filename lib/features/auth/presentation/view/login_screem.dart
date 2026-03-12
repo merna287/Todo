@@ -9,8 +9,8 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
-import 'package:todo/core/widgets/buttons.dart';
-import 'package:todo/core/widgets/text_form_field_widget.dart';
+import 'package:todo/core/common/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushNamed(context, AppRoutes.register),
                     child: Text.rich(
                       TextSpan(
-                        text: AppStrings.doNotHave,
+                        text: AppStrings.doNotHaveAnAccount,
                         style: AppTextStyles.regular16.copyWith(
                           color: AppColors.mediumGrey,
                         ),
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
         type: ToastificationType.success,
       );
 
-      Navigator.pushNamed(context, AppRoutes.home);
+      Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<LoginResponse>) {
       AppDialogs.showErrorDialog(context, result.failure.userMessage);
     }

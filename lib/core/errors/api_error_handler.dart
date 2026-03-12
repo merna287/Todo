@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:todo/core/errors/failure.dart';
@@ -11,10 +12,23 @@ Future<Result<T>> safeApiCall<T>(Future<T> Function() call) async {
   } on SocketException {
     return ErrorAPI<T>(const NetworkFailure());
   } on ServerException catch (e) {
+
+    String? serverMessage;
+
+    try {
+      if (e.responseBody != null) {
+        final jsonBody = jsonDecode(e.responseBody!);
+        serverMessage = jsonBody['error'];
+      }
+    } catch (_) {
+      serverMessage = null;
+    }
+
     return ErrorAPI<T>(ServerFailure(
       statusCode: e.statusCode,
-      message: 'Server responded with ${e.statusCode}',
+      serverMessage: serverMessage,
     ));
+
   } on FormatException {
     return ErrorAPI<T>(const ParsingFailure());
   } catch (e) {

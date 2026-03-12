@@ -9,7 +9,7 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
-import 'package:todo/core/widgets/text_form_field_widget.dart';
+import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/register_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -124,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     child: Text(
-                      AppStrings.register,
+                      AppStrings.register.toUpperCase(),
                       style: AppTextStyles.regular16.copyWith(
                         color: AppColors.whiteColor,
                       ),
@@ -189,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         type: ToastificationType.success,
       );
 
-      Navigator.pushNamed(context, AppRoutes.login);
+      Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<RegisterResponse>) {
       AppToast.showToast(
         context: context,

@@ -38,15 +38,18 @@ class AuthRepo {
   Future<Result<RegisterResponse>> register(RegisterRequest request) {
     return safeApiCall(() async {
       final url = Uri.https(AppApis.baseUrl, AppApis.register);
+      print("Register URL: $url");
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(request.toJson()),
       );
-
+ print("Status Code: ${response.statusCode}");
+    print("Response Body: ${response.body}"); 
       if (response.statusCode == 401) {
         throw AuthFailure();
       } else if (response.statusCode < 200 || response.statusCode >= 300) {
+        
         throw ServerException(
           statusCode: response.statusCode,
           responseBody: response.body,
