@@ -42,7 +42,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.mediumGrey,
+      backgroundColor: AppColors.primaryColor,
       appBar: widget.appBar,
       body: _screens[_currentIndex],
       floatingActionButton: SizedBox(

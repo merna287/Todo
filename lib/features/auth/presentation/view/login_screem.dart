@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
+import 'package:todo/core/common/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/dialogs/app_dialogs.dart';
 import 'package:todo/core/dialogs/app_toasts.dart';
@@ -9,8 +11,7 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
-import 'package:todo/core/widgets/buttons.dart';
-import 'package:todo/core/widgets/text_form_field_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 

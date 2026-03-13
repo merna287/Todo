@@ -3,6 +3,7 @@ class AppStrings {
   static const String back = "Back";
   static const String next = "Next";
   static const String home = "Home";
+  static const String title = "Title";
   static const String login = "Login";
   static const String email = "Email";
   static const String error = "Error";
@@ -15,8 +16,8 @@ class AppStrings {
   static const String password = "Password";
   static const String calendar = "Calendar";
   static const String getStarted = "Get Started";
+  static const String description = "Description";
   static const String createAccount = "Create account";
-  static const String doMathHomeWork = "Do math homework";
   static const String enterYourEmail = "Enter your Email";
   static const String confirmPassword = "Confirm Password";
   static const String loginSuccessful = "Login successful";
@@ -26,12 +27,14 @@ class AppStrings {
   static const String registerSuccessful = "Register Successful";
   static const String createDailyRoutine = "Create daily routine";
   static const String orgonaizeYourTasks = "Orgonaize your tasks";
+  static const String tapToAddYourTasks = "Tap + to add your tasks";
   static const String doNotHaveAnAccount = "Don’t have an account? ";
   static const String alreadyHaveAnAccount = "Already have an account? ";
   static const String pleaseLogin =
       "Please login to your account or create\n new account to continue";
   static const String youCanEasily =
       "You can easily manage all of your daily\n tasks in DoMe for free";
+  static const String whatDoYouWantToDoToday = "What do you want to do today?";
   static const String inUptodo =
       "In Uptodo  you can create your\n personalized routine to stay productive";
   static const String youCanOrganize =
