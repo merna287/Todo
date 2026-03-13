@@ -10,6 +10,7 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
 import 'package:todo/core/widgets/buttons.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
@@ -26,9 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _isRequestRunning = false;
-
-  final AuthViewModel _viewModel = AuthViewModel();
 
   @override
   void initState() {
@@ -116,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextSpan(
                             text: AppStrings.register,
                             style: AppTextStyles.regular16.copyWith(
-                              color: AppColors.deepPurple
+                              color: AppColors.deepPurple,
                             ),
                           ),
                         ],
@@ -134,19 +132,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
-    if (_isRequestRunning) return;
-    _isRequestRunning = true;
+    if (!mounted) return;
+    final viewModel = context.read<AuthViewModel>();
+
+    if (viewModel.isLoading) return;
+    viewModel.setLoading(true);
 
     AppDialogs.showLoadingDialog(context);
 
-    final Result<LoginResponse> result = await _viewModel.login(
+    final result = await viewModel.login(
       emailController.text.trim(),
       passwordController.text.trim(),
     );
 
     if (!mounted) return;
     AppDialogs.hideLoading(context);
-    _isRequestRunning = false;
+    viewModel.setLoading(false);
 
     if (result is SuccessAPI<LoginResponse>) {
       AppToast.showToast(
