@@ -9,6 +9,7 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/register_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
@@ -47,8 +48,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  final AuthViewModel _viewModel = AuthViewModel();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Text(
                   AppStrings.register,
                   style: AppTextStyles.bold32.copyWith(
-                    color: AppColors.whiteColor
+                    color: AppColors.whiteColor,
                   ),
                 ),
                 SizedBox(height: 23),
@@ -163,23 +162,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _registerUser() async {
-    if (isLoading) return;
+    if (!mounted) return;
+    final viewModel = context.read<AuthViewModel>();
 
-    isLoading = true;
+    if (viewModel.isLoading) return;
+    viewModel.setLoading(true);
 
     AppDialogs.showLoadingDialog(context);
 
-    final Result<RegisterResponse> result = await _viewModel.register(
+    final result = await viewModel.register(
       usernameController.text.trim(),
       emailController.text.trim(),
       passwordController.text.trim(),
     );
 
     if (!mounted) return;
-
     AppDialogs.hideLoading(context);
-
-    isLoading = false;
+    viewModel.setLoading(false);
 
     if (result is SuccessAPI<RegisterResponse>) {
       AppToast.showToast(
@@ -199,6 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     }
   }
+
   void _clearFields() {
     passwordController.clear();
     confirmController.clear();
