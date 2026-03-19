@@ -3,44 +3,51 @@ import 'package:todo/core/theme/app_colors.dart';
 
 abstract class AppDialogs {
   static void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return PopScope(
-          child: AlertDialog(
-            backgroundColor: AppColors.primaryColor,
-            content: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(color: AppColors.whiteColor),
-                const SizedBox(width: 16),
-                Text(
-                  'Loading...',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.whiteColor,
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return PopScope(
+            canPop: false,
+            child: AlertDialog(
+              backgroundColor: AppColors.primaryColor,
+              content: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(color: AppColors.whiteColor),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.whiteColor,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
-  
-  static void hideLoading(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pop();
+          );
+        },
+      );
+    });
   }
 
+  static void hideLoading(BuildContext context) {
+  if (Navigator.canPop(context)) {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
   static void showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => _ErrorDialog(message: message),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => _ErrorDialog(message: message),
+      );
+    });
   }
 }
 
@@ -62,7 +69,7 @@ class _ErrorDialog extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               message,
-              style: TextStyle(color: Colors.white , fontSize: 18),
+              style: TextStyle(color: Colors.white, fontSize: 18),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 22),

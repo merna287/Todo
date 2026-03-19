@@ -162,11 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _registerUser() async {
-    if (!mounted) return;
     final viewModel = context.read<AuthViewModel>();
-
-    if (viewModel.isLoading) return;
-    viewModel.setLoading(true);
 
     AppDialogs.showLoadingDialog(context);
 
@@ -178,7 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!mounted) return;
     AppDialogs.hideLoading(context);
-    viewModel.setLoading(false);
 
     if (result is SuccessAPI<RegisterResponse>) {
       AppToast.showToast(
@@ -187,7 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         description: AppStrings.registerSuccessful,
         type: ToastificationType.success,
       );
-
+      if (!mounted) return;
       Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<RegisterResponse>) {
       AppToast.showToast(

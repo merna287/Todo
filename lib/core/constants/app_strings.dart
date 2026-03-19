@@ -1,13 +1,20 @@
 class AppStrings {
+  static const String low = "Low";
   static const String skip = "Skip";
   static const String back = "Back";
   static const String next = "Next";
   static const String home = "Home";
+  static const String save = "Save";
+  static const String high = "High";
+  static const String edit = "Edit";
   static const String title = "Title";
   static const String login = "Login";
   static const String email = "Email";
   static const String error = "Error";
   static const String focus = "Focus";
+  static const String today = "Today";
+  static const String medium = "Medium";
+  static const String cancel = "Cancel";
   static const String success = "Success";
   static const String profile = "Profile";
   static const String addTask = "Add Task";
@@ -15,9 +22,14 @@ class AppStrings {
   static const String username = "Username";
   static const String password = "Password";
   static const String calendar = "Calendar";
+  static const String editTask = "Edit Task";
+  static const String taskTime = "Task Time";
   static const String getStarted = "Get Started";
-  static const String description = "Description";
+  static const String deleteTask = "Delete Task";
+  static const String description = "Description...";
+  static const String taskPriority = "Task Priority";
   static const String createAccount = "Create account";
+  static const String editTaskTitle = "Edit task title";
   static const String enterYourEmail = "Enter your Email";
   static const String confirmPassword = "Confirm Password";
   static const String loginSuccessful = "Login successful";
@@ -26,7 +38,8 @@ class AppStrings {
   static const String enterYourUsername = "Enter your Username";
   static const String registerSuccessful = "Register Successful";
   static const String createDailyRoutine = "Create daily routine";
-  static const String orgonaizeYourTasks = "Orgonaize your tasks";
+  static const String organizeYourTasks = "Organize your tasks";
+  static const String searchForYourTask = "Search for your task...";
   static const String tapToAddYourTasks = "Tap + to add your tasks";
   static const String doNotHaveAnAccount = "Don’t have an account? ";
   static const String alreadyHaveAnAccount = "Already have an account? ";

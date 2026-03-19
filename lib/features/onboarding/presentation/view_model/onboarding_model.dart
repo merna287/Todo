@@ -27,7 +27,7 @@ class OnboardingViewModel {
     ),
     OnboardingModel(
       image: Assets.assetsImagesOnboarding3,
-      title: AppStrings.orgonaizeYourTasks,
+      title: AppStrings.organizeYourTasks,
       body: AppStrings.youCanOrganize,
     ),
   ];

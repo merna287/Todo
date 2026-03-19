@@ -132,23 +132,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
-    if (!mounted) return;
     final viewModel = context.read<AuthViewModel>();
-
-    if (viewModel.isLoading) return;
-    viewModel.setLoading(true);
-
     AppDialogs.showLoadingDialog(context);
 
     final result = await viewModel.login(
       emailController.text.trim(),
       passwordController.text.trim(),
     );
-
     if (!mounted) return;
     AppDialogs.hideLoading(context);
-    viewModel.setLoading(false);
-
     if (result is SuccessAPI<LoginResponse>) {
       AppToast.showToast(
         context: context,
@@ -156,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
         description: AppStrings.loginSuccessful,
         type: ToastificationType.success,
       );
-
+      if (!mounted) return;
       Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<LoginResponse>) {
       AppDialogs.showErrorDialog(context, result.failure.userMessage);

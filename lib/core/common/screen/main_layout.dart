@@ -5,10 +5,10 @@ import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
+import 'package:todo/features/home/presentation/widgets/bottom_sheet_add_task.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key , this.appBar});
-  final PreferredSizeWidget? appBar; 
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -22,10 +22,36 @@ class _MainLayoutState extends State<MainLayout> {
     // CalendarScreen(),
     // FocusScreen(),
     // ProfileScreen(),
-    Container(color: Colors.red),  
-    Container(color: Colors.green), 
-    Container(color: Colors.blue),  
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
   ];
+
+  final List<String> _titles = [
+    AppStrings.home,
+    AppStrings.calendar,
+    AppStrings.focus,
+    AppStrings.profile,
+  ];
+
+  Widget? _buildLeading() {
+    if (_currentIndex == 0) {
+      return Padding(
+        padding: const EdgeInsets.all(12),
+        child: SvgPicture.asset(Assets.assetsIconsMenu),
+      );
+    }
+    return null;
+  }
+
+  List<Widget>? _buildActions() {
+    if (_currentIndex == 0) {
+      return const [
+        Padding(padding: EdgeInsets.only(right: 12), child: CircleAvatar()),
+      ];
+    }
+    return null;
+  }
 
   Widget _buildIcon(String assetPath, bool isSelected) {
     return SvgPicture.asset(
@@ -33,8 +59,8 @@ class _MainLayoutState extends State<MainLayout> {
       width: 24,
       height: 24,
       colorFilter: ColorFilter.mode(
-        isSelected ? AppColors.secondColor : AppColors.whiteColor,  
-        BlendMode.srcIn,  
+        isSelected ? AppColors.secondColor : AppColors.whiteColor,
+        BlendMode.srcIn,
       ),
     );
   }
@@ -43,13 +69,29 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: widget.appBar,
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
+        leading: _buildLeading(),
+        title: Text(
+          _titles[_currentIndex],
+          style: AppTextStyles.regular20.copyWith(color: AppColors.whiteColor),
+        ),
+        actions: _buildActions(),
+      ),
       body: _screens[_currentIndex],
       floatingActionButton: SizedBox(
         height: 64,
         width: 64,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: AppColors.darkGrey,
+              builder: (context) => BottomSheetAddTask(),
+            );
+          },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
@@ -58,7 +100,7 @@ class _MainLayoutState extends State<MainLayout> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      
+
       bottomNavigationBar: BottomAppBar(
         color: AppColors.mediumGrey,
         shape: const CircularNotchedRectangle(),
@@ -79,10 +121,11 @@ class _MainLayoutState extends State<MainLayout> {
                   children: [
                     _buildIcon(Assets.assetsIconsHome, _currentIndex == 0),
                     Text(
-                      AppStrings.home, style: AppTextStyles.regular16.copyWith(
+                      AppStrings.home,
+                      style: AppTextStyles.regular16.copyWith(
                         color: _currentIndex == 0
-                          ? AppColors.secondColor
-                          : AppColors.whiteColor,
+                            ? AppColors.secondColor
+                            : AppColors.whiteColor,
                       ),
                     ),
                   ],
@@ -99,10 +142,11 @@ class _MainLayoutState extends State<MainLayout> {
                   children: [
                     _buildIcon(Assets.assetsIconsCalendar, _currentIndex == 1),
                     Text(
-                      AppStrings.calendar, style: AppTextStyles.regular16.copyWith(
+                      AppStrings.calendar,
+                      style: AppTextStyles.regular16.copyWith(
                         color: _currentIndex == 1
-                        ? AppColors.secondColor
-                        : AppColors.whiteColor,
+                            ? AppColors.secondColor
+                            : AppColors.whiteColor,
                       ),
                     ),
                   ],
@@ -122,10 +166,11 @@ class _MainLayoutState extends State<MainLayout> {
                   children: [
                     _buildIcon(Assets.assetsIconsClock, _currentIndex == 2),
                     Text(
-                      AppStrings.focus, style: AppTextStyles.regular16.copyWith(
+                      AppStrings.focus,
+                      style: AppTextStyles.regular16.copyWith(
                         color: _currentIndex == 2
-                        ? AppColors.secondColor
-                        : AppColors.whiteColor,
+                            ? AppColors.secondColor
+                            : AppColors.whiteColor,
                       ),
                     ),
                   ],
@@ -142,10 +187,11 @@ class _MainLayoutState extends State<MainLayout> {
                   children: [
                     _buildIcon(Assets.assetsIconsUser, _currentIndex == 3),
                     Text(
-                      AppStrings.profile, style: AppTextStyles.regular16.copyWith(
+                      AppStrings.profile,
+                      style: AppTextStyles.regular16.copyWith(
                         color: _currentIndex == 3
-                        ? AppColors.secondColor
-                        : AppColors.whiteColor,
+                            ? AppColors.secondColor
+                            : AppColors.whiteColor,
                       ),
                     ),
                   ],

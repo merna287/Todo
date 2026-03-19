@@ -10,24 +10,30 @@ class EmptyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-          Image.asset(Assets.assetsImagesChecklist),
-          SizedBox(height: 7),
-          Text(
-            AppStrings.whatDoYouWantToDoToday,
-            style: AppTextStyles.regular20.copyWith(
-              color: AppColors.whiteColor
-            )
-          ),
-          Text(
-            AppStrings.tapToAddYourTasks,
-            style: AppTextStyles.regular16.copyWith(
-              color: AppColors.whiteColor
-            )
-          ),
-        ],
+      child: Center(
+        child: Column(
+          spacing: 5,
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+            Image.asset(Assets.assetsImagesChecklist,
+            width: 227,
+            height: 227,
+            scale: 3,
+            ),
+            Text(
+              AppStrings.whatDoYouWantToDoToday,
+              style: AppTextStyles.regular20.copyWith(
+                color: AppColors.whiteColor
+              )
+            ),
+            Text(
+              AppStrings.tapToAddYourTasks,
+              style: AppTextStyles.regular16.copyWith(
+                color: AppColors.whiteColor
+              )
+            ),
+          ],
+        ),
       ),
     );
   }

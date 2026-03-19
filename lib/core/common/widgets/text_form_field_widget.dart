@@ -9,6 +9,7 @@ class TextFormFieldWidget extends StatefulWidget {
     this.label,
     required this.controller,
     required this.myValidator,
+    this.color,
     this.keyboardType = TextInputType.text,
     this.hint,
     this.obscureText = false,
@@ -16,11 +17,14 @@ class TextFormFieldWidget extends StatefulWidget {
     this.widthBorder = 1.2,
     this.prefixIcon,
     this.fillColor,
+    this.maxLines = 1,
+    this.onChanged,
   });
 
   final String? label;
   final String? hint;
   final Color? fillColor;
+  final Color? color;
   final TextInputType keyboardType;
   final bool obscureText;
   final bool isPassword;
@@ -28,6 +32,8 @@ class TextFormFieldWidget extends StatefulWidget {
   final Validator myValidator;
   final double widthBorder;
   final Widget? prefixIcon;
+  final int maxLines;
+  final Function(String)? onChanged;
 
   @override
   State<TextFormFieldWidget> createState() => _TextFormFieldWidgetState();
@@ -52,7 +58,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
           widget.label ?? "",
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             color: AppColors.lightGrey,
           ),
         ),
@@ -61,26 +67,30 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           obscureText: widget.isPassword && _isHidden,
+          maxLines: widget.maxLines,
           validator: (value) {
             if (!_isTouched) return null;
             return widget.myValidator(value);
           },
-          onChanged: (_) {
+          onChanged: (value) {
             if (!_isTouched) {
               setState(() {
                 _isTouched = true;
               });
             }
+            if (widget.onChanged != null) {
+              widget.onChanged!(value);
+            }
           },
-          style: TextStyle(color: AppColors.lightGrey, fontSize: 16),
+          style: TextStyle(color: AppColors.whiteColor, fontSize: 18),
           decoration: InputDecoration(
             filled: widget.fillColor != null,
             fillColor: widget.fillColor,
             hintText: widget.hint ?? widget.label,
             hintStyle: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: AppColors.mediumGrey,
+              fontWeight: FontWeight.w500,
+              color: widget.color ?? AppColors.mediumGrey,
             ),
             errorStyle: const TextStyle(
               fontSize: 12,
