@@ -5,7 +5,7 @@ import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
-import 'package:todo/core/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/buttons.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});

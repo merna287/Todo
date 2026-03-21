@@ -10,13 +10,13 @@ abstract class Assets {
   static const String assetsIconsHome = "assets/icons/home.svg";
   static const String assetsIconsInfoCircle = "assets/icons/infoCircle.svg";
   static const String assetsIconsKey = "assets/icons/key.svg";
+  static const String assetsIconsSearch = "assets/icons/search.svg";
   static const String assetsIconsLike = "assets/icons/like.svg";
   static const String assetsIconsLogout = "assets/icons/logout.svg";
   static const String assetsIconsMenu = "assets/icons/menu.svg";
   static const String assetsIconsRepeat = "assets/icons/repeat.svg";
   static const String assetsIconsSend = "assets/icons/send.svg";
   static const String assetsIconsSetting = "assets/icons/setting.svg";
-  static const String assetsIconsSort = "assets/icons/sort.svg";
   static const String assetsIconsTag = "assets/icons/tag.svg";
   static const String assetsIconsTimer = "assets/icons/timer.svg";
   static const String assetsIconsTrash = "assets/icons/trash.svg";

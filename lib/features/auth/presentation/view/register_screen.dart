@@ -9,8 +9,8 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
+import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/core/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/register_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     child: Text(
-                      AppStrings.register,
+                      AppStrings.register.toUpperCase(),
                       style: AppTextStyles.regular16.copyWith(
                         color: AppColors.whiteColor,
                       ),
@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextSpan(
                         text: AppStrings.alreadyHaveAnAccount,
                         style: AppTextStyles.regular16.copyWith(
-                          color: AppColors.mediumGrey,
+                          color: AppColors.lightGrey,
                         ),
                         children: [
                           TextSpan(
@@ -162,11 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _registerUser() async {
-    if (!mounted) return;
     final viewModel = context.read<AuthViewModel>();
-
-    if (viewModel.isLoading) return;
-    viewModel.setLoading(true);
 
     AppDialogs.showLoadingDialog(context);
 
@@ -178,7 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!mounted) return;
     AppDialogs.hideLoading(context);
-    viewModel.setLoading(false);
 
     if (result is SuccessAPI<RegisterResponse>) {
       AppToast.showToast(
@@ -187,7 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         description: AppStrings.registerSuccessful,
         type: ToastificationType.success,
       );
-
+      if (!mounted) return;
       Navigator.pushNamed(context, AppRoutes.login);
     } else if (result is ErrorAPI<RegisterResponse>) {
       AppToast.showToast(

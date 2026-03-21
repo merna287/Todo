@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
+import 'package:todo/core/common/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/dialogs/app_dialogs.dart';
 import 'package:todo/core/dialogs/app_toasts.dart';
@@ -9,9 +11,7 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
-import 'package:todo/core/widgets/buttons.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/core/widgets/text_form_field_widget.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -76,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fillColor: AppColors.darkGrey,
                   controller: passwordController,
                   obscureText: true,
+                  isPassword: true,
                   myValidator: ValidatorApp.validatePassword,
                 ),
                 const SizedBox(height: 71),
@@ -106,9 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushNamed(context, AppRoutes.register),
                     child: Text.rich(
                       TextSpan(
-                        text: AppStrings.doNotHave,
+                        text: AppStrings.doNotHaveAnAccount,
                         style: AppTextStyles.regular16.copyWith(
-                          color: AppColors.mediumGrey,
+                          color: AppColors.lightGrey,
                         ),
                         children: [
                           TextSpan(
@@ -132,23 +133,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
-    if (!mounted) return;
     final viewModel = context.read<AuthViewModel>();
-
-    if (viewModel.isLoading) return;
-    viewModel.setLoading(true);
-
     AppDialogs.showLoadingDialog(context);
 
     final result = await viewModel.login(
       emailController.text.trim(),
       passwordController.text.trim(),
     );
-
     if (!mounted) return;
     AppDialogs.hideLoading(context);
-    viewModel.setLoading(false);
-
     if (result is SuccessAPI<LoginResponse>) {
       AppToast.showToast(
         context: context,
@@ -156,8 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
         description: AppStrings.loginSuccessful,
         type: ToastificationType.success,
       );
-
-      Navigator.pushNamed(context, AppRoutes.home);
+      if (!mounted) return;
+      Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<LoginResponse>) {
       AppDialogs.showErrorDialog(context, result.failure.userMessage);
     }

@@ -21,6 +21,8 @@ class AuthRepo {
         body: jsonEncode(request.toJson()),
       );
 
+      print("STATUS: ${response.statusCode}");
+      print("BODY: ${response.body}");
       if (response.statusCode == 401) {
         throw AuthFailure();
       } else if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -38,12 +40,15 @@ class AuthRepo {
   Future<Result<RegisterResponse>> register(RegisterRequest request) {
     return safeApiCall(() async {
       final url = Uri.https(AppApis.baseUrl, AppApis.register);
+
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(request.toJson()),
       );
 
+      print("STATUS: ${response.statusCode}");
+      print("BODY: ${response.body}");
       if (response.statusCode == 401) {
         throw AuthFailure();
       } else if (response.statusCode < 200 || response.statusCode >= 300) {

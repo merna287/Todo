@@ -3,7 +3,7 @@ import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
-import 'package:todo/core/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/buttons.dart';
 import 'package:todo/features/onboarding/presentation/view_model/onboarding_model.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Text(
                   AppStrings.skip.toUpperCase(),
                   style: AppTextStyles.regular16.copyWith(
-                    color: AppColors.mediumGrey,
+                    color: AppColors.lightGrey2,
                   ),
                 ),
               ),
@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Text(
                     item.body,
                     style: AppTextStyles.regular16.copyWith(
-                      color: AppColors.lightGrey,
+                      color: AppColors.lightGrey2,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -100,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 CustomButton(
                   text: AppStrings.back.toUpperCase(),
                   style: AppTextStyles.regular16.copyWith(
-                    color: AppColors.mediumGrey,
+                    color: AppColors.lightGrey2,
                   ),
                   onPressed: _currentPage == 0
                       ? null
