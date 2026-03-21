@@ -76,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fillColor: AppColors.darkGrey,
                   controller: passwordController,
                   obscureText: true,
+                  isPassword: true,
                   myValidator: ValidatorApp.validatePassword,
                 ),
                 const SizedBox(height: 71),
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextSpan(
                         text: AppStrings.doNotHaveAnAccount,
                         style: AppTextStyles.regular16.copyWith(
-                          color: AppColors.mediumGrey,
+                          color: AppColors.lightGrey,
                         ),
                         children: [
                           TextSpan(

@@ -22,9 +22,9 @@ class _MainLayoutState extends State<MainLayout> {
     // CalendarScreen(),
     // FocusScreen(),
     // ProfileScreen(),
-    Container(color: Colors.red),
-    Container(color: Colors.green),
-    Container(color: Colors.blue),
+    Container(color: AppColors.primaryColor),
+    Container(color: AppColors.primaryColor),
+    Container(color: AppColors.primaryColor),
   ];
 
   final List<String> _titles = [

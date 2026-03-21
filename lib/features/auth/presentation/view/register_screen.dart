@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextSpan(
                         text: AppStrings.alreadyHaveAnAccount,
                         style: AppTextStyles.regular16.copyWith(
-                          color: AppColors.mediumGrey,
+                          color: AppColors.lightGrey,
                         ),
                         children: [
                           TextSpan(
@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         type: ToastificationType.success,
       );
       if (!mounted) return;
-      Navigator.pushNamed(context, AppRoutes.main);
+      Navigator.pushNamed(context, AppRoutes.login);
     } else if (result is ErrorAPI<RegisterResponse>) {
       AppToast.showToast(
         context: context,

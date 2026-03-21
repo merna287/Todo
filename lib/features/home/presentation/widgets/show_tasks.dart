@@ -75,7 +75,7 @@ class _ShowTasksState extends State<ShowTasks> {
             },
             child: Container(
               height: 31,
-              width: 110,
+              width: 120,
               padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: AppColors.mediumGrey,

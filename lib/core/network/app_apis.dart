@@ -1,6 +1,6 @@
 class AppApis {
 
-  static const String baseUrl = "todo-backend-oob0.onrender.com";
+  static const String baseUrl = "todo-backends-704q.onrender.com";
   static const String register = "/api/auth/register";
   static const String login = "/api/auth/login";
   static const String getProfile = "/api/auth/me";

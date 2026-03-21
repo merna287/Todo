@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter UpTodo',
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.main,
+      initialRoute: AppRoutes.onboarding,
       routes: AppRoutes.routes,
     );
   }

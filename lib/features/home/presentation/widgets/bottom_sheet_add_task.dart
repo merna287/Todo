@@ -46,14 +46,14 @@ class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
           ),
           TextFormFieldWidget(
             hint: AppStrings.title,
-            color: AppColors.whiteColor,
+            color: AppColors.lightGrey2,
             controller: taskName,
             myValidator: ValidatorApp.validateName,
           ),
           TextFormFieldWidget(
             hint: AppStrings.description,
             controller: taskDescription,
-            color: AppColors.whiteColor,
+            color: AppColors.lightGrey2,
             myValidator: ValidatorApp.validateName,
             maxLines: 4,
           ),

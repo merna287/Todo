@@ -5,6 +5,7 @@ import 'package:todo/core/common/widgets/buttons.dart';
 import 'package:todo/core/common/widgets/svg_icon_button.dart';
 import 'package:todo/core/constants/app_assets.dart';
 import 'package:todo/core/constants/app_strings.dart';
+import 'package:todo/core/dialogs/app_dialogs.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
@@ -28,10 +29,12 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
   late String description;
   late String priority;
   late DateTime selectedDate;
+  late TaskModel originalTask;
 
   @override
   void initState() {
     super.initState();
+    originalTask = widget.task;
 
     title = widget.task.title;
     description = widget.task.description;
@@ -63,17 +66,28 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.mediumGrey,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: SvgPicture.asset(
-                  Assets.assetsIconsRepeat,
-                  width: 27,
-                  height: 27,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  title = originalTask.title;
+                  description = originalTask.description;
+                  priority = originalTask.priority;
+                  selectedDate = originalTask.deadline;
+                  isDone = originalTask.completed;
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.mediumGrey,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: SvgPicture.asset(
+                    Assets.assetsIconsRepeat,
+                    width: 27,
+                    height: 27,
+                  ),
                 ),
               ),
             ),
@@ -150,8 +164,20 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                     firstDate: DateTime.now(),
                     lastDate: DateTime.now().add(const Duration(days: 30)),
                     initialDate: selectedDate,
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.dark(
+                            primary: AppColors.secondColor,
+                            onPrimary: AppColors.whiteColor,
+                            surface: AppColors.darkGrey,
+                            onSurface: AppColors.whiteColor,
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
-
                   if (picked != null) {
                     setState(() {
                       selectedDate = picked;
@@ -201,13 +227,24 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
             ),
             const SizedBox(height: 25),
             InkWell(
-              onTap: () => context.read<TaskViewModel>().deleteTask(widget.task.id),
+              onTap: () async {
+                final confirm = await AppDialogs.showDeleteDialog(
+                  context,
+                  title: widget.task.title,
+                );
+
+                if (confirm == true) {
+                  context.read<TaskViewModel>().deleteTask(widget.task.id);
+                  Navigator.pop(context);
+                }
+              },
               child: Row(
                 children: [
                   SvgIconButton(
                     imagePath: Assets.assetsIconsTrash,
                     onTap: () {
                       context.read<TaskViewModel>().deleteTask(widget.task.id);
+                      Navigator.pop(context);
                     },
                     color: AppColors.redColor,
                   ),
@@ -247,7 +284,7 @@ class _DetailedTaskScreenState extends State<DetailedTaskScreen> {
                   );
 
                   context.read<TaskViewModel>().updateTask(updatedTask);
-                  Navigator.pop(context); 
+                  Navigator.pop(context);
                 },
               ),
             ),

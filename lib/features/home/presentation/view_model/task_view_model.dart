@@ -44,45 +44,45 @@ class TaskViewModel extends ChangeNotifier {
   Future<void> addTask(TaskModel task) async {
     _isLoading = true;
     notifyListeners();
-    _tasks.add(task);
-      _error = null;
-      print("Task added: ${task.title}");
-      print("Total tasks: ${_tasks.length}");
-
-    // final result = await api.addTask(task);
-
-    // if (result is SuccessAPI<TaskModel>) {
-    //   _tasks.add(result.data);
+    // _tasks.add(task);
     //   _error = null;
-    //   print("Task added: ${result.data.title}");
+    //   print("Task added: ${task.title}");
     //   print("Total tasks: ${_tasks.length}");
-    // } else if (result is ErrorAPI<TaskModel>) {
-    //   _error = result.failure.userMessage;
-    //   print("Error adding task: $_error");
-    // }
+
+    final result = await api.addTask(task);
+
+    if (result is SuccessAPI<TaskModel>) {
+      _tasks.add(result.data);
+      _error = null;
+      print("Task added: ${result.data.title}");
+      print("Total tasks: ${_tasks.length}");
+    } else if (result is ErrorAPI<TaskModel>) {
+      _error = result.failure.userMessage;
+      print("Error adding task: $_error");
+    }
 
     _isLoading = false;
     notifyListeners();
   }
 
   void toggleCompleted(TaskModel task) async {
-  final index = _tasks.indexWhere((t) => t.id == task.id);
-  if (index != -1) {
-    final updatedTask = TaskModel(
-      id: task.id,
-      title: task.title,
-      description: task.description,
-      priority: task.priority,
-      completed: !task.completed,
-      deadline: task.deadline,
-    );
+    final index = _tasks.indexWhere((t) => t.id == task.id);
+    if (index != -1) {
+      final updatedTask = TaskModel(
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+        completed: !task.completed,
+        deadline: task.deadline,
+      );
 
-    _tasks[index] = updatedTask;
-    notifyListeners();
+      _tasks[index] = updatedTask;
+      notifyListeners();
 
-    await updateTask(updatedTask);
+      await updateTask(updatedTask);
+    }
   }
-}
 
   Future<void> deleteTask(String id) async {
     _isLoading = true;
@@ -129,16 +129,24 @@ class TaskViewModel extends ChangeNotifier {
   }
 
   List<DateTime> get taskDates {
-    final dates = _tasks.map((t) => t.deadline).toSet().toList();
+    final dates = _tasks
+        .map((t) {
+          return DateTime(t.deadline.year, t.deadline.month, t.deadline.day);
+        })
+        .toSet()
+        .toList();
     dates.sort();
     return dates;
   }
 
   List<TaskModel> tasksForDate(DateTime date) {
-    return _tasks.where((t) =>
-      t.deadline.year == date.year &&
-      t.deadline.month == date.month &&
-      t.deadline.day == date.day
-    ).toList();
+    return _tasks
+        .where(
+          (t) =>
+              t.deadline.year == date.year &&
+              t.deadline.month == date.month &&
+              t.deadline.day == date.day,
+        )
+        .toList();
   }
 }

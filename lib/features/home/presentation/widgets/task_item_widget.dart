@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/common/widgets/svg_icon_button.dart';
 import 'package:todo/core/constants/app_assets.dart';
+import 'package:todo/core/dialogs/app_dialogs.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
@@ -91,9 +92,16 @@ class TaskItemWidget extends StatelessWidget {
               children: [
                 SvgIconButton(
                   imagePath: Assets.assetsIconsTrash,
-                  onTap: () {
-                    context.read<TaskViewModel>().deleteTask(task.id);
-                  },
+                  onTap: () async {
+                final confirm = await AppDialogs.showDeleteDialog(
+                  context,
+                  title: task.title,
+                );
+
+                if (confirm == true) {
+                  context.read<TaskViewModel>().deleteTask(task.id); 
+                }
+              },
                   color: AppColors.secondColor,
                 ),
                 Container(

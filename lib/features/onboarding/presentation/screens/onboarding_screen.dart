@@ -39,7 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Text(
                   AppStrings.skip.toUpperCase(),
                   style: AppTextStyles.regular16.copyWith(
-                    color: AppColors.mediumGrey,
+                    color: AppColors.lightGrey2,
                   ),
                 ),
               ),
@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Text(
                     item.body,
                     style: AppTextStyles.regular16.copyWith(
-                      color: AppColors.lightGrey,
+                      color: AppColors.lightGrey2,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -100,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 CustomButton(
                   text: AppStrings.back.toUpperCase(),
                   style: AppTextStyles.regular16.copyWith(
-                    color: AppColors.mediumGrey,
+                    color: AppColors.lightGrey2,
                   ),
                   onPressed: _currentPage == 0
                       ? null

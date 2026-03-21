@@ -31,7 +31,7 @@ class TaskModel {
     return {
       "title": title,
       "description": description,
-      "priority": priority,
+      "priority": priority.toLowerCase(),
       "completed": completed,
       "deadline": deadline.toIso8601String(),
     };
