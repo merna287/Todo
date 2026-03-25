@@ -24,11 +24,11 @@ class TaskViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchTasks(String userId) async {
+  Future<void> fetchTasks() async {
     _isLoading = true;
     notifyListeners();
 
-    final result = await api.getTasks(userId);
+    final result = await api.getTasks();
 
     if (result is SuccessAPI<List<TaskModel>>) {
       _tasks = result.data;
@@ -44,15 +44,10 @@ class TaskViewModel extends ChangeNotifier {
   Future<void> addTask(TaskModel task) async {
     _isLoading = true;
     notifyListeners();
-    // _tasks.add(task);
-    //   _error = null;
-    //   print("Task added: ${task.title}");
-    //   print("Total tasks: ${_tasks.length}");
-
     final result = await api.addTask(task);
 
     if (result is SuccessAPI<TaskModel>) {
-      _tasks.add(result.data);
+      await fetchTasks();
       _error = null;
       print("Task added: ${result.data.title}");
       print("Total tasks: ${_tasks.length}");
@@ -91,6 +86,7 @@ class TaskViewModel extends ChangeNotifier {
     final result = await api.deleteTask(id);
 
     if (result is SuccessAPI<void>) {
+      await fetchTasks();
       _tasks.removeWhere((task) => task.id == id);
       _error = null;
     } else if (result is ErrorAPI<void>) {
@@ -108,6 +104,7 @@ class TaskViewModel extends ChangeNotifier {
     final result = await api.updateTask(task);
 
     if (result is SuccessAPI<TaskModel>) {
+      await fetchTasks();
       final index = _tasks.indexWhere((t) => t.id == task.id);
       if (index != -1) _tasks[index] = task;
       _error = null;
@@ -140,7 +137,9 @@ class TaskViewModel extends ChangeNotifier {
   }
 
   List<TaskModel> tasksForDate(DateTime date) {
-    return _tasks
+    final priorityRanking = {"high": 1, "medium": 2, "low": 3};
+
+    final tasks = _tasks
         .where(
           (t) =>
               t.deadline.year == date.year &&
@@ -148,5 +147,11 @@ class TaskViewModel extends ChangeNotifier {
               t.deadline.day == date.day,
         )
         .toList();
+
+    tasks.sort((a, b) =>
+          priorityRanking[a.priority.toLowerCase()]!
+          .compareTo(priorityRanking[b.priority.toLowerCase()]!));
+
+    return tasks;
   }
 }

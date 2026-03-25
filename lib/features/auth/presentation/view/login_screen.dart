@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 import 'package:todo/core/common/widgets/buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/dialogs/app_dialogs.dart';
@@ -14,6 +15,7 @@ import 'package:todo/core/utils/app_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:todo/features/home/presentation/view_model/task_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -140,9 +142,18 @@ class _LoginScreenState extends State<LoginScreen> {
       emailController.text.trim(),
       passwordController.text.trim(),
     );
+
     if (!mounted) return;
     AppDialogs.hideLoading(context);
+
     if (result is SuccessAPI<LoginResponse>) {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString("token", result.data.token!);
+      if (!mounted) return;
+      final taskViewModel = context.read<TaskViewModel>();
+      await taskViewModel.fetchTasks();
+
+      if (!mounted) return;
       AppToast.showToast(
         context: context,
         title: AppStrings.success,

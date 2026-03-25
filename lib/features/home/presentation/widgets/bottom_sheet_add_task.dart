@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/common/widgets/svg_icon_button.dart';
 import 'package:todo/core/common/widgets/text_form_field_widget.dart';
@@ -84,7 +84,7 @@ class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
                         },
                       ) ??
                       DateTime.now();
-                      setState(() {});
+                  setState(() {});
                 },
               ),
               SizedBox(width: 7),
@@ -112,18 +112,20 @@ class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
     );
   }
 
-  void _addTask() async{
+  void _addTask() async {
     final task = TaskModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), 
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: taskName.text,
       description: taskDescription.text,
       priority: priority,
       deadline: selectedDate,
     );
 
-    await context.read<TaskViewModel>().addTask(task);
+    final taskViewModel = context.read<TaskViewModel>();
 
-    Navigator.of(context).pop();
+    await taskViewModel.addTask(task);
+
+    if (mounted) Navigator.of(context).pop();
   }
 }
 
