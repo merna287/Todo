@@ -22,13 +22,13 @@ class TaskApi {
       final url = Uri.https(AppApis.baseUrl, AppApis.createTodo);
 
       final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(task.toJson()),
-      );
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(task.toJson())
+    );
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw ServerException(
@@ -42,10 +42,10 @@ class TaskApi {
     });
   }
 
-  Future<Result<List<TaskModel>>> getTasks(String id) {
+  Future<Result<List<TaskModel>>> getTasks() {
     return safeApiCall(() async {
       final token = await _getToken();
-      final url = Uri.https(AppApis.baseUrl, AppApis.getTodoById(id));
+      final url = Uri.https(AppApis.baseUrl, AppApis.getTodos);
 
       final response = await http.get(
         url,
