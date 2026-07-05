@@ -5,7 +5,8 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 
 class EmptyHome extends StatelessWidget {
-  const EmptyHome({super.key});
+  final int pageIndex;
+  const EmptyHome({super.key, required this.pageIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,9 @@ class EmptyHome extends StatelessWidget {
         child: Column(
           spacing: 5,
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+            pageIndex == 0
+                ? SizedBox(height: MediaQuery.of(context).size.height * 0.12)
+                : SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Image.asset(Assets.assetsImagesChecklist,
             width: 227,
             height: 227,

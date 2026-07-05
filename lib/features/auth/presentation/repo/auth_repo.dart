@@ -41,6 +41,7 @@ class AuthRepo {
     return safeApiCall(() async {
       final url = Uri.https(AppApis.baseUrl, AppApis.register);
 
+print(url);
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},

@@ -21,6 +21,8 @@ class AppStrings {
   static const String register = "Register";
   static const String username = "Username";
   static const String password = "Password";
+  static const String completed = "Completed";
+  static const String taskTitle = "Task Title";
   static const String calendar = "Calendar";
   static const String editTask = "Edit Task";
   static const String taskTime = "Task Time";

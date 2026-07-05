@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final allTasks = vm.tasks;
 
         if (allTasks.isEmpty) {
-          return const EmptyHome();
+          return const EmptyHome(pageIndex: 0,);
         }
 
         return Column(
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) {
                   if (searchController.text.isNotEmpty) {
                     if (filteredTasks.isEmpty) {
-                      return const EmptyHome(); 
+                      return const EmptyHome(pageIndex: 0,); 
                     } else {
                       return ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

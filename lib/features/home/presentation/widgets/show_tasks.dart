@@ -102,7 +102,7 @@ class _ShowTasksState extends State<ShowTasks> {
 
         Expanded(
           child: tasksForSelectedDate.isEmpty
-              ? EmptyHome()
+              ? EmptyHome(pageIndex: 0,)
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
