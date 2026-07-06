@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/routing/app_router.dart';
+import 'package:todo/core/services/auth_service.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/common/widgets/buttons.dart';
@@ -31,7 +32,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Align(
               alignment: Alignment.topLeft,
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await AuthService.instance.setOnboardingCompleted();
+                  if (!mounted) return;
                   setState(() {
                     Navigator.pushNamed(context, AppRoutes.intro);
                   });
@@ -123,12 +126,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     horizontal: 24,
                     vertical: 12,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_currentPage < length - 1) {
                       setState(() {
                         _currentPage++;
                       });
                     } else {
+                      await AuthService.instance.setOnboardingCompleted();
+                      if (!mounted) return;
                       Navigator.pushNamed(context, AppRoutes.intro);
                     }
                   },

@@ -14,6 +14,8 @@ class TaskViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _hasLoadedInitialTasks = false;
+
   String? _error;
   String? get error => _error;
 
@@ -24,7 +26,11 @@ class TaskViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchTasks() async {
+  Future<void> fetchTasks({bool forceRefresh = false}) async {
+    if (!forceRefresh && _hasLoadedInitialTasks && _tasks.isNotEmpty) {
+      return;
+    }
+
     _isLoading = true;
     notifyListeners();
 
@@ -33,6 +39,7 @@ class TaskViewModel extends ChangeNotifier {
     if (result is SuccessAPI<List<TaskModel>>) {
       _tasks = result.data;
       _error = null;
+      _hasLoadedInitialTasks = true;
     } else if (result is ErrorAPI<List<TaskModel>>) {
       _error = result.failure.userMessage;
     }
@@ -47,7 +54,7 @@ class TaskViewModel extends ChangeNotifier {
     final result = await api.addTask(task);
 
     if (result is SuccessAPI<TaskModel>) {
-      await fetchTasks();
+      await fetchTasks(forceRefresh: true);
       _error = null;
       print("Task added: ${result.data.title}");
       print("Total tasks: ${_tasks.length}");
@@ -86,7 +93,7 @@ class TaskViewModel extends ChangeNotifier {
     final result = await api.deleteTask(id);
 
     if (result is SuccessAPI<void>) {
-      await fetchTasks();
+      await fetchTasks(forceRefresh: true);
       _tasks.removeWhere((task) => task.id == id);
       _error = null;
     } else if (result is ErrorAPI<void>) {
@@ -104,7 +111,7 @@ class TaskViewModel extends ChangeNotifier {
     final result = await api.updateTask(task);
 
     if (result is SuccessAPI<TaskModel>) {
-      await fetchTasks();
+      await fetchTasks(forceRefresh: true);
       final index = _tasks.indexWhere((t) => t.id == task.id);
       if (index != -1) _tasks[index] = task;
       _error = null;

@@ -12,9 +12,16 @@ class CalendarHeader extends StatefulWidget {
 }
 
 class _CalendarHeaderState extends State<CalendarHeader> {
+  late DateTime _focusedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusedDay = widget.selectedDate;
+  }
+
   @override
   Widget build(BuildContext context) {
-    DateTime _focusedDay = DateTime.now();
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Container(
@@ -24,7 +31,7 @@ class _CalendarHeaderState extends State<CalendarHeader> {
         ),
         padding: const EdgeInsets.all(12),
         child: TableCalendar(
-          firstDay: DateTime(2026),
+          firstDay: DateTime(2020),
           lastDay: DateTime(2035),
           focusedDay: _focusedDay,
 

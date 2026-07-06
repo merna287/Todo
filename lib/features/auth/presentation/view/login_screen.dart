@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 import 'package:todo/core/common/widgets/buttons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/dialogs/app_dialogs.dart';
@@ -13,6 +12,7 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/features/Profile/model_view/profile_view_model.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:todo/features/home/presentation/view_model/task_view_model.dart';
@@ -147,10 +147,10 @@ class _LoginScreenState extends State<LoginScreen> {
     AppDialogs.hideLoading(context);
 
     if (result is SuccessAPI<LoginResponse>) {
-      final sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setString("token", result.data.token!);
       if (!mounted) return;
+      final profileViewModel = context.read<ProfileViewModel>();
       final taskViewModel = context.read<TaskViewModel>();
+      await profileViewModel.fetchProfile();
       await taskViewModel.fetchTasks();
 
       if (!mounted) return;

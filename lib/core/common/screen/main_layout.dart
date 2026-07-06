@@ -4,6 +4,8 @@ import 'package:todo/core/constants/app_assets.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
+import 'package:todo/features/Profile/views/profile_screen.dart';
+import 'package:todo/features/Profile/widget/profile_avatar.dart';
 import 'package:todo/features/home/Calendar/presentation/view/calendar_screen.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
 import 'package:todo/features/home/presentation/widgets/bottom_sheet_add_task.dart';
@@ -21,10 +23,9 @@ class _MainLayoutState extends State<MainLayout> {
   final List<Widget> _screens = [
     HomeScreen(),
     // FocusScreen(),
-    // ProfileScreen(),
     CalendarScreen(),
     Container(color: AppColors.primaryColor),
-    Container(color: AppColors.primaryColor),
+    ProfileScreen(),
   ];
 
   final List<String> _titles = [
@@ -47,7 +48,7 @@ class _MainLayoutState extends State<MainLayout> {
   List<Widget>? _buildActions() {
     if (_currentIndex == 0) {
       return const [
-        Padding(padding: EdgeInsets.only(right: 12), child: CircleAvatar()),
+        Padding(padding: EdgeInsets.only(right: 12), child: ProfileAvatar(radius: 20)),
       ];
     }
     return null;
