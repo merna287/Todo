@@ -1,36 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:todo/core/routing/app_router.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/core/services/auth_service.dart';
+import 'package:todo/features/Profile/model_view/profile_view_model.dart';
 import 'package:todo/features/home/presentation/api/task_api.dart';
 import 'package:todo/features/home/presentation/view_model/task_view_model.dart';
-import 'features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final profileViewModel = ProfileViewModel();
+  final taskViewModel = TaskViewModel(api: TaskApi());
+  final hasValidToken = await AuthService.instance.hasValidToken();
+
+  if (hasValidToken) {
+    await profileViewModel.fetchProfile();
+    await taskViewModel.fetchTasks();
+  }
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => TaskViewModel(api: TaskApi()),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => taskViewModel),
+        ChangeNotifierProvider(create: (_) => profileViewModel),
       ],
-      child: MyApp(),
+      child: MyApp(
+        initialRoute: hasValidToken ? AppRoutes.main : AppRoutes.login,
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.initialRoute});
+
+  final String initialRoute;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter UpTodo',
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.onboarding,
+      initialRoute: initialRoute,
       routes: AppRoutes.routes,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
