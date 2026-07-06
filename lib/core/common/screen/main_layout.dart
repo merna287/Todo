@@ -7,6 +7,7 @@ import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/features/Profile/views/profile_screen.dart';
 import 'package:todo/features/Profile/widget/profile_avatar.dart';
 import 'package:todo/features/home/Calendar/presentation/view/calendar_screen.dart';
+import 'package:todo/features/focus/presentation/view/focus_mode_screen.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
 import 'package:todo/features/home/presentation/widgets/bottom_sheet_add_task.dart';
 
@@ -22,9 +23,8 @@ class _MainLayoutState extends State<MainLayout> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    // FocusScreen(),
     CalendarScreen(),
-    Container(color: AppColors.primaryColor),
+    FocusModeScreen(),
     ProfileScreen(),
   ];
 

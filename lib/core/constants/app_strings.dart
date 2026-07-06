@@ -12,6 +12,15 @@ class AppStrings {
   static const String email = "Email";
   static const String error = "Error";
   static const String focus = "Focus";
+  static const String focusMode = "Focus Mode";
+  static const String focusModeDescription =
+      "While your focus mode is on, all of your notifications will be off";
+  static const String overview = "Overview";
+  static const String thisWeek = "This Week";
+  static const String startFocusing = "Start Focusing";
+  static const String stopFocusing = "Stop Focusing";
+  static const String inProgress = "In progress";
+  static const String readyToFocus = "Ready to focus";
   static const String today = "Today";
   static const String uptodo = "UpTodo";
   static const String logout = "Logout";

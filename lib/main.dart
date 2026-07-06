@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/core/services/auth_service.dart';
 import 'package:todo/features/Profile/model_view/profile_view_model.dart';
 import 'package:todo/features/home/presentation/api/task_api.dart';
+import 'package:todo/features/focus/presentation/view_model/focus_view_model.dart';
 import 'package:todo/features/home/presentation/view_model/task_view_model.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -25,6 +26,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => taskViewModel),
         ChangeNotifierProvider(create: (_) => profileViewModel),
+        ChangeNotifierProvider(create: (_) => FocusViewModel()),
       ],
       child: MyApp(
         initialRoute: hasValidToken ? AppRoutes.main : AppRoutes.login,
