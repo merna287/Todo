@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todo/core/errors/failure.dart';
-import 'package:todo/core/network/result_api.dart';
-import 'package:todo/features/home/presentation/api/task_api.dart';
+import 'package:todo/features/home/presentation/model/sync_status.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
+import 'package:todo/features/home/presentation/repository/task_repository.dart';
 
 class TaskViewModel extends ChangeNotifier {
-  TaskViewModel({required this.api});
-  final TaskApi api;
+  TaskViewModel({required this.repository});
+  final TaskRepository repository;
 
   List<TaskModel> _tasks = [];
   List<TaskModel> get tasks => _tasks;
@@ -19,11 +18,18 @@ class TaskViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  String _searchText = "";
+  String _searchText = '';
 
   void search(String value) {
     _searchText = value.toLowerCase();
     notifyListeners();
+  }
+
+  Future<void> initialize() async {
+    _tasks = await repository.loadLocalTasks();
+    _hasLoadedInitialTasks = true;
+    notifyListeners();
+    await fetchTasks(forceRefresh: true);
   }
 
   Future<void> fetchTasks({bool forceRefresh = false}) async {
@@ -34,16 +40,16 @@ class TaskViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final result = await api.getTasks();
+    final cachedTasks = await repository.loadLocalTasks();
+    _tasks = cachedTasks;
+    _hasLoadedInitialTasks = true;
+    notifyListeners();
 
-    if (result is SuccessAPI<List<TaskModel>>) {
-      _tasks = result.data;
-      _error = null;
-      _hasLoadedInitialTasks = true;
-    } else if (result is ErrorAPI<List<TaskModel>>) {
-      _error = result.failure.userMessage;
-    }
-
+    final refreshedTasks = await repository.refreshFromRemote(
+      forceRefresh: forceRefresh,
+    );
+    _tasks = refreshedTasks;
+    _error = null;
     _isLoading = false;
     notifyListeners();
   }
@@ -51,54 +57,43 @@ class TaskViewModel extends ChangeNotifier {
   Future<void> addTask(TaskModel task) async {
     _isLoading = true;
     notifyListeners();
-    final result = await api.addTask(task);
 
-    if (result is SuccessAPI<TaskModel>) {
+    final createdTask = await repository.createTask(task);
+    _tasks = await repository.loadLocalTasks();
+    _error = null;
+
+    if (createdTask.syncStatus == SyncStatus.synced) {
       await fetchTasks(forceRefresh: true);
-      _error = null;
-      print("Task added: ${result.data.title}");
-      print("Total tasks: ${_tasks.length}");
-    } else if (result is ErrorAPI<TaskModel>) {
-      _error = result.failure.userMessage;
-      print("Error adding task: $_error");
     }
 
     _isLoading = false;
     notifyListeners();
   }
 
-  void toggleCompleted(TaskModel task) async {
-    final index = _tasks.indexWhere((t) => t.id == task.id);
-    if (index != -1) {
-      final updatedTask = TaskModel(
-        id: task.id,
-        title: task.title,
-        description: task.description,
-        priority: task.priority,
-        completed: !task.completed,
-        deadline: task.deadline,
-      );
-
-      _tasks[index] = updatedTask;
-      notifyListeners();
-
-      await updateTask(updatedTask);
+  Future<void> toggleCompleted(TaskModel task) async {
+    final index = _tasks.indexWhere((item) => item.id == task.id);
+    if (index == -1) {
+      return;
     }
+
+    final updatedTask = task.copyWith(
+      completed: !task.completed,
+      syncStatus: SyncStatus.pendingUpdate,
+    );
+
+    _tasks[index] = updatedTask;
+    notifyListeners();
+
+    await updateTask(updatedTask);
   }
 
   Future<void> deleteTask(String id) async {
     _isLoading = true;
     notifyListeners();
 
-    final result = await api.deleteTask(id);
-
-    if (result is SuccessAPI<void>) {
-      await fetchTasks(forceRefresh: true);
-      _tasks.removeWhere((task) => task.id == id);
-      _error = null;
-    } else if (result is ErrorAPI<void>) {
-      _error = result.failure.userMessage;
-    }
+    await repository.deleteTask(id);
+    _tasks.removeWhere((task) => task.id == id);
+    _error = null;
 
     _isLoading = false;
     notifyListeners();
@@ -108,16 +103,13 @@ class TaskViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final result = await api.updateTask(task);
-
-    if (result is SuccessAPI<TaskModel>) {
-      await fetchTasks(forceRefresh: true);
-      final index = _tasks.indexWhere((t) => t.id == task.id);
-      if (index != -1) _tasks[index] = task;
-      _error = null;
-    } else if (result is ErrorAPI<TaskModel>) {
-      _error = result.failure.userMessage;
+    final syncedTask = await repository.updateTask(task);
+    _tasks = await repository.loadLocalTasks();
+    final index = _tasks.indexWhere((item) => item.id == syncedTask.id);
+    if (index != -1) {
+      _tasks[index] = syncedTask;
     }
+    _error = null;
 
     _isLoading = false;
     notifyListeners();
@@ -134,8 +126,8 @@ class TaskViewModel extends ChangeNotifier {
 
   List<DateTime> get taskDates {
     final dates = _tasks
-        .map((t) {
-          return DateTime(t.deadline.year, t.deadline.month, t.deadline.day);
+        .map((task) {
+          return DateTime(task.deadline.year, task.deadline.month, task.deadline.day);
         })
         .toSet()
         .toList();
@@ -144,21 +136,34 @@ class TaskViewModel extends ChangeNotifier {
   }
 
   List<TaskModel> tasksForDate(DateTime date) {
-    final priorityRanking = {"high": 1, "medium": 2, "low": 3};
+    final priorityRanking = {'high': 1, 'medium': 2, 'low': 3};
 
     final tasks = _tasks
         .where(
-          (t) =>
-              t.deadline.year == date.year &&
-              t.deadline.month == date.month &&
-              t.deadline.day == date.day,
+          (task) =>
+              task.deadline.year == date.year &&
+              task.deadline.month == date.month &&
+              task.deadline.day == date.day,
         )
         .toList();
 
-    tasks.sort((a, b) =>
-          priorityRanking[a.priority.toLowerCase()]!
-          .compareTo(priorityRanking[b.priority.toLowerCase()]!));
+    tasks.sort(
+      (a, b) => priorityRanking[a.priority.toLowerCase()]!
+          .compareTo(priorityRanking[b.priority.toLowerCase()]!),
+    );
 
     return tasks;
+  }
+
+  Future<void> syncPendingTasks() async {
+    _isLoading = true;
+    notifyListeners();
+
+    await repository.syncPendingTasks();
+    _tasks = await repository.loadLocalTasks();
+    _error = null;
+
+    _isLoading = false;
+    notifyListeners();
   }
 }
