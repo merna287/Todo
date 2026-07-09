@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/core/common/screen/main_layout.dart';
-import 'package:todo/features/Profile/views/profile_placeholder_screen.dart';
+import 'package:todo/features/profile/views/profile_placeholder_screen.dart';
 import 'package:todo/features/auth/presentation/view/login_screen.dart';
 import 'package:todo/features/auth/presentation/view/register_screen.dart';
 import 'package:todo/features/onboarding/presentation/screens/intro_screen.dart';

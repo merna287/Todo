@@ -12,7 +12,7 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/features/Profile/model_view/profile_view_model.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:todo/features/home/presentation/view_model/task_view_model.dart';

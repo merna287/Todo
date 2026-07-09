@@ -4,7 +4,7 @@ import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/utils/app_validator.dart';
-import 'package:todo/features/Profile/model_view/profile_view_model.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 
 class ShowChangeName extends StatefulWidget {
   const ShowChangeName({super.key});

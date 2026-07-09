@@ -5,14 +5,14 @@ import 'package:todo/core/services/auth_service.dart';
 import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
-import 'package:todo/features/Profile/model/profile_menu_item_data.dart';
-import 'package:todo/features/Profile/model_view/profile_view_model.dart';
-import 'package:todo/features/Profile/widget/profile_avatar.dart';
-import 'package:todo/features/Profile/widget/profile_logout_button.dart';
-import 'package:todo/features/Profile/widget/profile_section.dart';
-import 'package:todo/features/Profile/widget/show_change_name.dart';
-import 'package:todo/features/Profile/widget/show_change_password.dart';
-import 'package:todo/features/Profile/widget/statistic_card.dart';
+import 'package:todo/features/profile/model/profile_menu_item_data.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
+import 'package:todo/features/profile/widget/profile_avatar.dart';
+import 'package:todo/features/profile/widget/profile_logout_button.dart';
+import 'package:todo/features/profile/widget/profile_section.dart';
+import 'package:todo/features/profile/widget/show_change_name.dart';
+import 'package:todo/features/profile/widget/show_change_password.dart';
+import 'package:todo/features/profile/widget/statistic_card.dart';
 import 'package:todo/features/home/presentation/view_model/task_view_model.dart';
 
 class ProfileScreen extends StatefulWidget {

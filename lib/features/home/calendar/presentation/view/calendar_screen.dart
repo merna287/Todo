@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo/features/home/Calendar/presentation/widgets/calendar_header.dart';
-import 'package:todo/features/home/Calendar/presentation/widgets/calendar_tasks.dart';
-import 'package:todo/features/home/Calendar/presentation/widgets/task_filter.dart';
+import 'package:todo/features/home/calendar/presentation/widgets/calendar_header.dart';
+import 'package:todo/features/home/calendar/presentation/widgets/calendar_tasks.dart';
+import 'package:todo/features/home/calendar/presentation/widgets/task_filter.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});

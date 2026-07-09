@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
-import 'package:todo/features/Profile/model_view/profile_view_model.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({super.key, this.radius = 50});

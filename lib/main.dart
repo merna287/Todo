@@ -5,7 +5,7 @@ import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/services/auth_service.dart';
 import 'package:todo/core/services/connectivity_service.dart';
 import 'package:todo/core/services/sync_service.dart';
-import 'package:todo/features/Profile/model_view/profile_view_model.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:todo/features/focus/presentation/view_model/focus_view_model.dart';
 import 'package:todo/features/home/presentation/api/task_api.dart';

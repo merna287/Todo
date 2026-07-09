@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
-import 'package:todo/features/Profile/model/profile_menu_item_data.dart';
+import 'package:todo/features/profile/model/profile_menu_item_data.dart';
 
 class ProfileMenuItem extends StatelessWidget {
   const ProfileMenuItem({
