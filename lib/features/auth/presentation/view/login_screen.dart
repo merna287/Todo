@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 import 'package:todo/core/common/widgets/buttons.dart';
+import 'package:todo/core/common/widgets/suggestions_dropdown.dart';
 import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/dialogs/app_dialogs.dart';
@@ -12,6 +13,7 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/core/utils/app_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/features/auth/presentation/models/remembered_account.dart';
 import 'package:todo/features/profile/model_view/profile_view_model.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/view_model/auth_view_model.dart';
@@ -30,10 +32,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  List<String> emailSuggestions = [];
+  List<RememberedAccount> rememberedAccounts = [];
+  bool showEmailSuggestions = false;
+  bool rememberMe = false;
+
   @override
   void initState() {
     super.initState();
-    _clearFields();
+    //_clearFields();
+    loadRememberedAccounts();
+  }
+
+  Future<void> loadRememberedAccounts() async {
+    rememberedAccounts =
+        await context
+            .read<AuthViewModel>()
+            .getRememberedAccounts();
+
+    emailSuggestions =
+        rememberedAccounts
+            .map((e) => e.email)
+            .toList();
+
+    setState(() {});
   }
 
   @override
@@ -70,8 +92,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   fillColor: AppColors.darkGrey,
                   hint: AppStrings.enterYourEmail,
                   keyboardType: TextInputType.emailAddress,
+                  onTap: () {
+                    setState(() {
+                      showEmailSuggestions =
+                          emailSuggestions.isNotEmpty;
+                    });
+                  },
                   myValidator: ValidatorApp.validateEmail,
                 ),
+
+                SuggestionsDropdown(
+                  suggestions: emailSuggestions,
+                  isVisible: showEmailSuggestions,
+                  onSuggestionSelected: (email) {
+                    final account = rememberedAccounts.firstWhere(
+                      (e) => e.email == email,
+                    );
+
+                    emailController.text = account.email;
+                    passwordController.text = account.password;
+
+                    setState(() {
+                      showEmailSuggestions = false;
+                      rememberMe = true;
+                    });
+                  },
+                ),
+
                 const SizedBox(height: 26),
                 TextFormFieldWidget(
                   label: AppStrings.password,
@@ -80,6 +127,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                   isPassword: true,
                   myValidator: ValidatorApp.validatePassword,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: rememberMe,
+                      onChanged: (value) {
+                        setState(() {
+                          rememberMe = value ?? false;
+                        });
+                      },
+                    ),
+                    const Text(
+                      'Remember Me',
+                      style: TextStyle(color: AppColors.whiteColor),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 71),
                 SizedBox(
@@ -160,6 +224,12 @@ class _LoginScreenState extends State<LoginScreen> {
         description: AppStrings.loginSuccessful,
         type: ToastificationType.success,
       );
+      if (rememberMe) {
+        await viewModel.saveLogin(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      } 
       if (!mounted) return;
       Navigator.pushNamed(context, AppRoutes.main);
     } else if (result is ErrorAPI<LoginResponse>) {

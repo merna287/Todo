@@ -18,6 +18,13 @@ class ProfileViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  void reset() {
+    _user = null;
+    _error = null;
+    _hasLoadedInitialProfile = false;
+    notifyListeners();
+  }
+
   Future<void> loadCachedProfile() async {
     final prefs = await SharedPreferences.getInstance();
 

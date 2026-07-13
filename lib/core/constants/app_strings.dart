@@ -12,15 +12,6 @@ class AppStrings {
   static const String email = "Email";
   static const String error = "Error";
   static const String focus = "Focus";
-  static const String focusMode = "Focus Mode";
-  static const String focusModeDescription =
-      "While your focus mode is on, all of your notifications will be off";
-  static const String overview = "Overview";
-  static const String thisWeek = "This Week";
-  static const String startFocusing = "Start Focusing";
-  static const String stopFocusing = "Stop Focusing";
-  static const String inProgress = "In progress";
-  static const String readyToFocus = "Ready to focus";
   static const String today = "Today";
   static const String uptodo = "UpTodo";
   static const String logout = "Logout";
@@ -35,16 +26,23 @@ class AppStrings {
   static const String password = "Password";
   static const String calendar = "Calendar";
   static const String settings = "Settings";
+  static const String overview = "Overview";
+  static const String thisWeek = "This Week";
   static const String editTask = "Edit Task";
   static const String taskTime = "Task Time";
   static const String completed = "Completed";
   static const String taskTitle = "Task Title";
+  static const String focusMode = "Focus Mode";
   static const String getStarted = "Get Started";
   static const String deleteTask = "Delete Task";
+  static const String inProgress = "In progress";
+  static const String stopFocusing = "Stop Focusing";
+  static const String readyToFocus = "Ready to focus";
   static const String description = "Description...";
   static const String taskPriority = "Task Priority";
   static const String enterNewName = "Enter new name";
   static const String createAccount = "Create account";
+  static const String startFocusing = "Start Focusing";
   static const String editTaskTitle = "Edit task title";
   static const String changePassword = "Change Password";
   static const String enterYourEmail = "Enter your Email";
@@ -57,6 +55,7 @@ class AppStrings {
   static const String enterYourUsername = "Enter your Username";
   static const String changeAccountName = "Change account name";
   static const String registerSuccessful = "Register Successful";
+  static const String rememberedAccounts = "remembered_accounts";
   static const String createDailyRoutine = "Create daily routine";
   static const String organizeYourTasks = "Organize your tasks";
   static const String searchForYourTask = "Search for your task...";
@@ -67,6 +66,8 @@ class AppStrings {
       "Please login to your account or create\n new account to continue";
   static const String youCanEasily =
       "You can easily manage all of your daily\n tasks in DoMe for free";
+  static const String focusModeDescription =
+      "While your focus mode is on, all of your notifications will be off";
   static const String whatDoYouWantToDoToday = "What do you want to do today?";
   static const String inUptodo =
       "In Uptodo  you can create your\n personalized routine to stay productive";

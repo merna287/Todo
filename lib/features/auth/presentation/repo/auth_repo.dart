@@ -94,6 +94,7 @@ print(url);
       return User.fromJson(json);
     });
   }
+  
 
 //   Future<Result<User>> updateProfile(String newName) {
 //   return safeApiCall(() async {

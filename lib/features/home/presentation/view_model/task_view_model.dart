@@ -25,6 +25,13 @@ class TaskViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+    void reset() {
+    _tasks = [];
+    _error = null;
+    _hasLoadedInitialTasks = false;
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     _tasks = await repository.loadLocalTasks();
     _hasLoadedInitialTasks = true;

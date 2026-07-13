@@ -19,6 +19,7 @@ class TextFormFieldWidget extends StatefulWidget {
     this.fillColor,
     this.maxLines = 1,
     this.onChanged,
+    this.onTap,
   });
 
   final String? label;
@@ -34,6 +35,7 @@ class TextFormFieldWidget extends StatefulWidget {
   final Widget? prefixIcon;
   final int maxLines;
   final Function(String)? onChanged;
+  final Function()? onTap;
 
   @override
   State<TextFormFieldWidget> createState() => _TextFormFieldWidgetState();
@@ -66,6 +68,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
         TextFormField(
           controller: widget.controller,
           keyboardType: widget.keyboardType,
+          onTap: widget.onTap,
           obscureText: widget.isPassword && _isHidden,
           maxLines: widget.maxLines,
           validator: (value) {
