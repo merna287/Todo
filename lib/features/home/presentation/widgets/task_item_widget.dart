@@ -73,7 +73,7 @@ class TaskItemWidget extends StatelessWidget {
                           : null,
                       decorationThickness: 2, 
                     ),
-                    maxLines: 1,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),

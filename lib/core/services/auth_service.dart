@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
 
 class AuthService {
@@ -43,5 +44,15 @@ class AuthService {
     await prefs.remove('user_name');
     await prefs.remove('user_email');
     await Hive.box<TaskModel>('tasks').clear();
+  }
+
+  Future<void> forceLogout() async {
+    await clearSession();
+
+    AppRouter.navigatorKey.currentState
+        ?.pushNamedAndRemoveUntil(
+      AppRoutes.login,
+      (route) => false,
+    );
   }
 }

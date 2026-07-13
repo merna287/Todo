@@ -231,16 +231,20 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } 
       if (!mounted) return;
-      Navigator.pushNamed(context, AppRoutes.main);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.main,
+        (route) => false,
+      );
     } else if (result is ErrorAPI<LoginResponse>) {
       AppDialogs.showErrorDialog(context, result.failure.userMessage);
     }
   }
 
-  void _clearFields() {
-    emailController.clear();
-    passwordController.clear();
+  // void _clearFields() {
+  //   emailController.clear();
+  //   passwordController.clear();
 
-    _formKey.currentState?.reset();
-  }
+  //   _formKey.currentState?.reset();
+  // }
 }

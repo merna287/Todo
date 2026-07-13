@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:todo/core/errors/failure.dart';
 import 'package:todo/core/errors/server_exception.dart';
 import 'package:todo/core/network/result_api.dart';
+import 'package:todo/core/services/auth_service.dart';
 
 Future<Result<T>> safeApiCall<T>(Future<T> Function() call) async {
   try {
@@ -32,6 +33,10 @@ Future<Result<T>> safeApiCall<T>(Future<T> Function() call) async {
   } on FormatException {
     return ErrorAPI<T>(const ParsingFailure());
   } catch (e) {
+    if (e is AuthFailure) {
+      await AuthService.instance.forceLogout();
+      return ErrorAPI<T>(e);
+    }
     if (e is Failure) return ErrorAPI<T>(e);
     return ErrorAPI<T>(UnknownFailure(e.toString()));
   }

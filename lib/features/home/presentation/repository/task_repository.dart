@@ -25,9 +25,18 @@ class TaskRepository {
   final ConnectivityService connectivityService;
 
   Future<List<TaskModel>> loadLocalTasks() async {
-    final tasks = box.values.toList();
-    tasks.sort((a, b) => a.deadline.compareTo(b.deadline));
+    final tasks =
+        box.values.where((task) => !task.isDeleted).toList();
+
+    tasks.sort(
+      (a, b) => a.deadline.compareTo(b.deadline),
+    );
+
     return tasks;
+  }
+
+  List<TaskModel> _allLocalTasks() {
+    return box.values.toList();
   }
 
   Future<List<TaskModel>> refreshFromRemote({bool forceRefresh = false}) async {
@@ -38,7 +47,7 @@ class TaskRepository {
     final result = await api.getTasks();
     if (result is SuccessAPI<List<TaskModel>>) {
       final remoteTasks = result.data;
-      final localTasks = await loadLocalTasks();
+      final localTasks = _allLocalTasks();
       final mergedTasks = mergeTasks(localTasks, remoteTasks);
 
       await box.clear();
@@ -110,9 +119,9 @@ class TaskRepository {
       return;
     }
 
-    final pendingTasks = (await loadLocalTasks())
-        .where((task) => task.isPendingSync)
-        .toList();
+    final pendingTasks = _allLocalTasks()
+    .where((task) => task.isPendingSync)
+    .toList();
 
     for (final task in pendingTasks) {
       if (task.syncStatus == SyncStatus.pendingCreate) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -36,11 +37,13 @@ Future<void> main() async {
 
   if (hasValidToken) {
   await profileViewModel.loadCachedProfile();
-  profileViewModel.fetchProfile();
-  await taskViewModel.initialize();
-  } else {
-    await taskViewModel.fetchTasks();
-  }
+  await taskViewModel.loadFromCache();
+
+  unawaited(profileViewModel.fetchProfile());
+  unawaited(
+    taskViewModel.fetchTasks(forceRefresh: true),
+  );
+}
 
   await syncService.initialize();
 
@@ -69,6 +72,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: AppRouter.navigatorKey,
       title: 'Flutter UpTodo',
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
