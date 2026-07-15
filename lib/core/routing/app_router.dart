@@ -42,6 +42,7 @@ class AppRoutes {
 }
 
 class AppRouter {
+  static final navigatorKey = GlobalKey<NavigatorState>();
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final builder = AppRoutes.routes[settings.name];
     if (builder != null) {

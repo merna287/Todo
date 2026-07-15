@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:todo/core/network/result_api.dart';
+import 'package:todo/core/errors/failure.dart';
 import 'package:todo/core/services/connectivity_service.dart';
 import 'package:todo/features/home/presentation/api/task_api.dart';
 import 'package:todo/features/home/presentation/model/sync_status.dart';
@@ -25,20 +26,33 @@ class TaskRepository {
   final ConnectivityService connectivityService;
 
   Future<List<TaskModel>> loadLocalTasks() async {
-    final tasks = box.values.toList();
-    tasks.sort((a, b) => a.deadline.compareTo(b.deadline));
+    final tasks =
+        box.values.where((task) => !task.isDeleted).toList();
+
+    tasks.sort(
+      (a, b) => a.deadline.compareTo(b.deadline),
+    );
+
     return tasks;
   }
 
-  Future<List<TaskModel>> refreshFromRemote({bool forceRefresh = false}) async {
+  List<TaskModel> _allLocalTasks() {
+    return box.values.toList();
+  }
+
+  Future<({List<TaskModel> tasks, Failure? failure})>
+  refreshFromRemote() async {
     if (!await connectivityService.hasConnection) {
-      return loadLocalTasks();
+      return (
+        tasks: await loadLocalTasks(),
+        failure: const NetworkFailure(),
+      );
     }
 
     final result = await api.getTasks();
     if (result is SuccessAPI<List<TaskModel>>) {
       final remoteTasks = result.data;
-      final localTasks = await loadLocalTasks();
+      final localTasks = _allLocalTasks();
       final mergedTasks = mergeTasks(localTasks, remoteTasks);
 
       await box.clear();
@@ -46,10 +60,18 @@ class TaskRepository {
         await box.put(task.id, task);
       }
 
-      return mergedTasks;
+      return (
+        tasks: mergedTasks,
+        failure: null,
+      );
     }
 
-    return loadLocalTasks();
+    final failure = (result as ErrorAPI<List<TaskModel>>).failure;
+
+    return (
+      tasks: await loadLocalTasks(),
+      failure: failure,
+    );
   }
 
   Future<TaskModel> createTask(TaskModel task) async {
@@ -110,9 +132,9 @@ class TaskRepository {
       return;
     }
 
-    final pendingTasks = (await loadLocalTasks())
-        .where((task) => task.isPendingSync)
-        .toList();
+    final pendingTasks = _allLocalTasks()
+    .where((task) => task.isPendingSync)
+    .toList();
 
     for (final task in pendingTasks) {
       if (task.syncStatus == SyncStatus.pendingCreate) {
@@ -136,7 +158,7 @@ class TaskRepository {
       }
     }
 
-    await refreshFromRemote(forceRefresh: true);
+    await refreshFromRemote();
   }
 
   Future<void> _saveTask(TaskModel task) async {

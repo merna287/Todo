@@ -161,14 +161,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onTap: () async {
                   final navigator = Navigator.of(context);
                   await AuthService.instance.clearSession();
+                  taskVm.reset();
+                  profileVm.reset();
 
                   if (!mounted) return;
                   navigator.pushNamedAndRemoveUntil(
-                    AppRoutes.login,
+                    AppRoutes.intro,
                     (route) => false,
                   );
                 },
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

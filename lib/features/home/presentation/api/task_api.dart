@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo/core/errors/api_error_handler.dart';
+import 'package:todo/core/errors/failure.dart';
 import 'package:todo/core/errors/server_exception.dart';
 import 'package:todo/core/network/result_api.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
@@ -12,7 +13,7 @@ class TaskApi {
   Future<String> _getToken() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString("token");
-    if (token == null) throw Exception("No token found, please login again");
+    if (token == null) throw AuthFailure();
     return token;
   }
 
@@ -30,13 +31,16 @@ class TaskApi {
       body: jsonEncode(task.toJson())
     );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw ServerException(
-          statusCode: response.statusCode,
-          responseBody: response.body,
-        );
-      }
+      if (response.statusCode == 401) {
+      throw AuthFailure();
+    }
 
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ServerException(
+        statusCode: response.statusCode,
+        responseBody: response.body,
+      );
+    }
       final json = jsonDecode(response.body);
       return TaskModel.fromJson(json);
     });

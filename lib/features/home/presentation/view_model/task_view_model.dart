@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/core/errors/failure.dart';
 import 'package:todo/features/home/presentation/model/sync_status.dart';
 import 'package:todo/features/home/presentation/model/task_model.dart';
 import 'package:todo/features/home/presentation/repository/task_repository.dart';
@@ -25,6 +26,19 @@ class TaskViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+    void reset() {
+    _tasks = [];
+    _error = null;
+    _hasLoadedInitialTasks = false;
+    notifyListeners();
+  }
+
+  Future<void> loadFromCache() async {
+    _tasks = await repository.loadLocalTasks();
+    _hasLoadedInitialTasks = true;
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     _tasks = await repository.loadLocalTasks();
     _hasLoadedInitialTasks = true;
@@ -45,11 +59,10 @@ class TaskViewModel extends ChangeNotifier {
     _hasLoadedInitialTasks = true;
     notifyListeners();
 
-    final refreshedTasks = await repository.refreshFromRemote(
-      forceRefresh: forceRefresh,
-    );
-    _tasks = refreshedTasks;
-    _error = null;
+    final result = await repository.refreshFromRemote();
+
+    _tasks = result.tasks;
+    _error = result.failure?.userMessage;
     _isLoading = false;
     notifyListeners();
   }
@@ -160,8 +173,11 @@ class TaskViewModel extends ChangeNotifier {
     notifyListeners();
 
     await repository.syncPendingTasks();
-    _tasks = await repository.loadLocalTasks();
-    _error = null;
+
+    final result = await repository.refreshFromRemote();
+
+    _tasks = result.tasks;
+    _error = result.failure?.userMessage;
 
     _isLoading = false;
     notifyListeners();

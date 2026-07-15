@@ -19,100 +19,108 @@ class BottomSheetAddTask extends StatefulWidget {
 }
 
 class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
-  late TextEditingController taskName;
-  late TextEditingController taskDescription;
+  final _formKey = GlobalKey<FormState>();
+  final taskName = TextEditingController();
+  final taskDescription = TextEditingController();
   late DateTime selectedDate = DateTime.now();
   late String priority = AppStrings.low;
 
   @override
-  void initState() {
-    super.initState();
-    taskName = TextEditingController();
-    taskDescription = TextEditingController();
+  void dispose() {
+    taskName.dispose();
+    taskDescription.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        crossAxisAlignment: .start,
-        children: [
-          Text(
-            AppStrings.addTask,
-            style: AppTextStyles.regular20.copyWith(
-              color: AppColors.whiteColor,
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Text(
+              AppStrings.addTask,
+              style: AppTextStyles.regular20.copyWith(
+                color: AppColors.whiteColor,
+              ),
             ),
-          ),
-          TextFormFieldWidget(
-            hint: AppStrings.title,
-            color: AppColors.lightGrey2,
-            controller: taskName,
-            myValidator: ValidatorApp.validateName,
-          ),
-          TextFormFieldWidget(
-            hint: AppStrings.description,
-            controller: taskDescription,
-            color: AppColors.lightGrey2,
-            myValidator: ValidatorApp.validateName,
-            maxLines: 4,
-          ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              SvgIconButton(
-                imagePath: Assets.assetsIconsTimer,
-                onTap: () async {
-                  selectedDate =
-                      await showDatePicker(
-                        context: context,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 30)),
-                        initialDate: DateTime.now(),
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              colorScheme: const ColorScheme.dark(
-                                primary: AppColors.secondColor,
-                                onPrimary: AppColors.whiteColor,
-                                surface: AppColors.darkGrey,
-                                onSurface: AppColors.whiteColor,
+            TextFormFieldWidget(
+              hint: AppStrings.title,
+              color: AppColors.lightGrey2,
+              controller: taskName,
+              myValidator: ValidatorApp.validateName,
+            ),
+            TextFormFieldWidget(
+              hint: AppStrings.description,
+              controller: taskDescription,
+              color: AppColors.lightGrey2,
+              myValidator: ValidatorApp.validateName,
+              maxLines: 4,
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                SvgIconButton(
+                  imagePath: Assets.assetsIconsTimer,
+                  onTap: () async {
+                    selectedDate =
+                        await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(const Duration(days: 30)),
+                          initialDate: DateTime.now(),
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                  primary: AppColors.secondColor,
+                                  onPrimary: AppColors.whiteColor,
+                                  surface: AppColors.darkGrey,
+                                  onSurface: AppColors.whiteColor,
+                                ),
                               ),
-                            ),
-                            child: child!,
-                          );
+                              child: child!,
+                            );
+                          },
+                        ) ??
+                        DateTime.now();
+                    setState(() {});
+                  },
+                ),
+                SizedBox(width: 7),
+                SvgIconButton(
+                  imagePath: Assets.assetsIconsFlag,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DialogCustomWidget(
+                        getPriority: (selectedPriority) {
+                          setState(() {
+                            priority = selectedPriority;
+                          });
                         },
-                      ) ??
-                      DateTime.now();
-                  setState(() {});
-                },
-              ),
-              SizedBox(width: 7),
-              SvgIconButton(
-                imagePath: Assets.assetsIconsFlag,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => DialogCustomWidget(
-                      getPriority: (selectedPriority) {
-                        setState(() {
-                          priority = selectedPriority;
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-              Spacer(),
-              SvgIconButton(imagePath: Assets.assetsIconsSend, onTap: _addTask),
-            ],
-          ),
-        ],
+                      ),
+                    );
+                  },
+                ),
+                Spacer(),
+                SvgIconButton(imagePath: Assets.assetsIconsSend, onTap: _addTask),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   void _addTask() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     final task = TaskModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: taskName.text,
@@ -120,7 +128,6 @@ class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
       priority: priority,
       deadline: selectedDate,
     );
-
     final taskViewModel = context.read<TaskViewModel>();
 
     await taskViewModel.addTask(task);

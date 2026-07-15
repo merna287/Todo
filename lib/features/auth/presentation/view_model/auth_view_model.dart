@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todo/core/network/result_api.dart';
 import 'package:todo/core/services/auth_service.dart';
+import 'package:todo/core/services/login_storage_service.dart';
 import 'package:todo/features/auth/presentation/models/login_request.dart';
 import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/models/register_request.dart';
 import 'package:todo/features/auth/presentation/models/register_response.dart';
+import 'package:todo/features/auth/presentation/models/remembered_account.dart';
 import 'package:todo/features/auth/presentation/repo/auth_repo.dart';
 
 class AuthViewModel extends ChangeNotifier {
@@ -36,6 +38,7 @@ class AuthViewModel extends ChangeNotifier {
       email: email,
       password: password,
     );
+    
     final result = await _repo.register(request);
 
     if (result is SuccessAPI<RegisterResponse>) {
@@ -48,5 +51,37 @@ class AuthViewModel extends ChangeNotifier {
     }
 
     return result;
+  }
+
+  //   Future<RememberedAccount?> getSavedLogin() async {
+  //   final email = await LoginStorageService.getEmail();
+  //   final password = await LoginStorageService.getPassword();
+
+  //   if (email == null || password == null) return null;
+
+  //   return RememberedAccount(
+  //     email: email,
+  //     password: password,
+  //     savedAt: DateTime.now(),
+  //   );
+  // }
+
+  Future<List<RememberedAccount>> getRememberedAccounts() async {
+    return await LoginStorageService.getAccounts();
+  }
+  Future<void> saveLogin({
+    required String email,
+    required String password,
+  }) async {
+    await LoginStorageService.saveAccount(
+      RememberedAccount(
+        email: email,
+        password: password,
+        savedAt: DateTime.now(),
+      ),
+    );
+  }
+  Future<void> clearLogin() async {
+    await LoginStorageService.clear();
   }
 }

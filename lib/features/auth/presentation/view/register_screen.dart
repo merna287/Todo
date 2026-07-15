@@ -183,7 +183,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         type: ToastificationType.success,
       );
       if (!mounted) return;
-      Navigator.pushNamed(context, AppRoutes.login);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.main,
+        (route) => false,
+      );
     } else if (result is ErrorAPI<RegisterResponse>) {
       AppToast.showToast(
         context: context,

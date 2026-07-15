@@ -43,7 +43,7 @@ class AuthRepo {
     return safeApiCall(() async {
       final url = Uri.https(AppApis.baseUrl, AppApis.register);
 
-print(url);
+      print(url);
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -94,6 +94,7 @@ print(url);
       return User.fromJson(json);
     });
   }
+  
 
 //   Future<Result<User>> updateProfile(String newName) {
 //   return safeApiCall(() async {
