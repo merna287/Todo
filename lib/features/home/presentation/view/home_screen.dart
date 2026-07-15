@@ -18,6 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController searchController = TextEditingController();
 
   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+  @override
   void initState() {
     super.initState();
 

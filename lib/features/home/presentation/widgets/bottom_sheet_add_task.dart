@@ -20,16 +20,16 @@ class BottomSheetAddTask extends StatefulWidget {
 
 class _BottomSheetAddTaskState extends State<BottomSheetAddTask> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController taskName;
-  late TextEditingController taskDescription;
+  final taskName = TextEditingController();
+  final taskDescription = TextEditingController();
   late DateTime selectedDate = DateTime.now();
   late String priority = AppStrings.low;
 
   @override
-  void initState() {
-    super.initState();
-    taskName = TextEditingController();
-    taskDescription = TextEditingController();
+  void dispose() {
+    taskName.dispose();
+    taskDescription.dispose();
+    super.dispose();
   }
 
   @override
