@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:todo/core/network/result_api.dart';
+import 'package:todo/core/errors/failure.dart';
 import 'package:todo/core/services/connectivity_service.dart';
 import 'package:todo/features/home/presentation/api/task_api.dart';
 import 'package:todo/features/home/presentation/model/sync_status.dart';
@@ -39,9 +40,13 @@ class TaskRepository {
     return box.values.toList();
   }
 
-  Future<List<TaskModel>> refreshFromRemote({bool forceRefresh = false}) async {
+  Future<({List<TaskModel> tasks, Failure? failure})>
+  refreshFromRemote() async {
     if (!await connectivityService.hasConnection) {
-      return loadLocalTasks();
+      return (
+        tasks: await loadLocalTasks(),
+        failure: const NetworkFailure(),
+      );
     }
 
     final result = await api.getTasks();
@@ -55,10 +60,18 @@ class TaskRepository {
         await box.put(task.id, task);
       }
 
-      return mergedTasks;
+      return (
+        tasks: mergedTasks,
+        failure: null,
+      );
     }
 
-    return loadLocalTasks();
+    final failure = (result as ErrorAPI<List<TaskModel>>).failure;
+
+    return (
+      tasks: await loadLocalTasks(),
+      failure: failure,
+    );
   }
 
   Future<TaskModel> createTask(TaskModel task) async {
@@ -145,7 +158,7 @@ class TaskRepository {
       }
     }
 
-    await refreshFromRemote(forceRefresh: true);
+    await refreshFromRemote();
   }
 
   Future<void> _saveTask(TaskModel task) async {

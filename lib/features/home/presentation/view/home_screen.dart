@@ -49,6 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: (value) => vm.search(value),
             ),
 
+            if (vm.error != null)
+              MaterialBanner(
+                content: Text(vm.error!),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await vm.syncPendingTasks();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+
             Expanded(
               child: Builder(
                 builder: (context) {
