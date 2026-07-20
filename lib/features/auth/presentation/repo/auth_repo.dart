@@ -12,6 +12,7 @@ import 'package:todo/features/auth/presentation/models/login_response.dart';
 import 'package:todo/features/auth/presentation/models/register_request.dart';
 import 'package:todo/features/auth/presentation/models/register_response.dart';
 import 'package:todo/features/auth/presentation/models/user.dart';
+import 'package:todo/features/profile/model_view/update_profile_request.dart';
 
 class AuthRepo {
   Future<Result<LoginResponse>> login(LoginRequest request) {
@@ -96,29 +97,32 @@ class AuthRepo {
   }
   
 
-//   Future<Result<User>> updateProfile(String newName) {
-//   return safeApiCall(() async {
-//     final url = Uri.https(AppApis.baseUrl, AppApis.updateProfile);
+  Future<Result<User>> updateProfile(UpdateProfileRequest request) {
+    return safeApiCall(() async {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final token = sharedPreferences.getString("token");
 
-//     final response = await http.put(
-//       url,
-//       headers: {
-//         "Content-Type": "application/json",
-//         "Authorization": "Bearer $token",
-//       },
-//       body: jsonEncode({
-//         "name": newName,
-//       }),
-//     );
+      final url = Uri.https(AppApis.baseUrl, AppApis.updateProfile);
 
-//     if (response.statusCode < 200 || response.statusCode >= 300) {
-//       throw ServerException(
-//         statusCode: response.statusCode,
-//         responseBody: response.body,
-//       );
-//     }
+      final response = await http.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(request.toJson()),
+      );
 
-//     return User.fromJson(jsonDecode(response.body));
-//   });
-// }
+      if (response.statusCode == 401) {
+        throw AuthFailure();
+      } else if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw ServerException(
+          statusCode: response.statusCode,
+          responseBody: response.body,
+        );
+      }
+
+      return User.fromJson(jsonDecode(response.body));
+    });
+  }
 }

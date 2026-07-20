@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: InkWell(
                     onTap: () =>
-                        Navigator.pushNamed(context, AppRoutes.register),
+                        Navigator.pushNamedAndRemoveUntil(context, AppRoutes.register, (route) => false),
                     child: Text.rich(
                       TextSpan(
                         text: AppStrings.doNotHaveAnAccount,

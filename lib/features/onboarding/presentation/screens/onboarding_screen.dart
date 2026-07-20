@@ -36,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   await AuthService.instance.setOnboardingCompleted();
                   if (!mounted) return;
                   setState(() {
-                    Navigator.pushNamed(context, AppRoutes.intro);
+                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.intro, (route) => false);
                   });
                 },
                 child: Text(
@@ -134,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     } else {
                       await AuthService.instance.setOnboardingCompleted();
                       if (!mounted) return;
-                      Navigator.pushNamed(context, AppRoutes.intro);
+                      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.intro, (route) => false);
                     }
                   },
                 ),

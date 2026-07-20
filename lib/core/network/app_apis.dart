@@ -4,6 +4,7 @@ class AppApis {
   static const String register = "/api/auth/register";
   static const String login = "/api/auth/login";
   static const String getProfile = "/api/auth/me";
+  static const String updateProfile = '/api/auth/me';
 
   static const String getTodos = "/api/todos";
   static const String createTodo = "/api/todos";

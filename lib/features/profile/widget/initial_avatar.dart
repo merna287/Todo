@@ -4,10 +4,11 @@ import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
 import 'package:todo/features/profile/model_view/profile_view_model.dart';
 
-class ProfileAvatar extends StatelessWidget {
-  const ProfileAvatar({super.key, this.radius = 50});
+class InitialAvatar extends StatelessWidget {
+  const InitialAvatar({super.key, this.radius = 50, this.backgroundColor});
 
   final double radius;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ProfileAvatar extends StatelessWidget {
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: AppColors.secondColor,
+      backgroundColor: backgroundColor?? AppColors.secondColor,
       child: Text(initial, style: textStyle),
     );
   }

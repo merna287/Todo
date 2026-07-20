@@ -34,16 +34,28 @@ Future<void> main() async {
     connectivityService: connectivityService,
   );
   final hasValidToken = await AuthService.instance.hasValidToken();
+  final hasCompletedOnboarding =
+      await AuthService.instance.hasCompletedOnboarding();
+
+  String initialRoute;
 
   if (hasValidToken) {
-  await profileViewModel.loadCachedProfile();
-  await taskViewModel.loadFromCache();
+    initialRoute = AppRoutes.main;
+  } else if (hasCompletedOnboarding) {
+    initialRoute = AppRoutes.intro;
+  } else {
+    initialRoute = AppRoutes.onboarding;
+  }
 
-  unawaited(profileViewModel.fetchProfile());
-  unawaited(
-    taskViewModel.fetchTasks(forceRefresh: true),
-  );
-}
+  if (hasValidToken) {
+    await profileViewModel.loadCachedProfile();
+    await taskViewModel.loadFromCache();
+
+    unawaited(profileViewModel.fetchProfile());
+    unawaited(
+      taskViewModel.fetchTasks(forceRefresh: true),
+    );
+  }
 
   await syncService.initialize();
 
@@ -58,7 +70,7 @@ Future<void> main() async {
         Provider.value(value: syncService),
       ],
       child: MyApp(
-        initialRoute: hasValidToken ? AppRoutes.main : AppRoutes.login,
+        initialRoute: initialRoute,
       ),
     ),
   );
@@ -77,7 +89,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
       routes: AppRoutes.routes,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+      //onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

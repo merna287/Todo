@@ -133,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Spacer(),
                 Center(
                   child: InkWell(
-                    onTap: () => Navigator.pushNamed(context, AppRoutes.login),
+                    onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.login),
                     child: Text.rich(
                       TextSpan(
                         text: AppStrings.alreadyHaveAnAccount,

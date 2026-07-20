@@ -1,16 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
+import 'package:provider/provider.dart';
 import 'package:todo/core/common/widgets/text_form_field_widget.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/utils/app_validator.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 
 class ShowChangePassword extends StatelessWidget {
   const ShowChangePassword({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController oldPasswordController = TextEditingController();
+    final viewModel = context.read<ProfileViewModel>();
+    final newPasswordController = TextEditingController();
+    final oldPasswordController = TextEditingController();
     return AlertDialog(
       backgroundColor: AppColors.mediumGrey,
       title: Column(
@@ -22,6 +25,7 @@ class ShowChangePassword extends StatelessWidget {
         ],
       ),
       content:Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextFormFieldWidget(
             hint: AppStrings.enterOldPassword,
@@ -45,7 +49,7 @@ class ShowChangePassword extends StatelessWidget {
         ),
         FilledButton(
           onPressed: () {
-            // viewModel.updatePassword(newPasswordController.text);
+            viewModel.updateProfile('',newPasswordController.text,'');
             Navigator.pop(context);
           },
           child: const Text(AppStrings.edit),

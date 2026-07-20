@@ -66,7 +66,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     vertical: 15,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.login);
+                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
                   },
                 ),
               ),
@@ -87,7 +87,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     vertical: 15,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.register);
+                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.register, (route) => false);
                   },
                 ),
               ),

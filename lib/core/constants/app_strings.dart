@@ -37,6 +37,7 @@ class AppStrings {
   static const String deleteTask = "Delete Task";
   static const String inProgress = "In progress";
   static const String stopFocusing = "Stop Focusing";
+  static const String chooseAvatar = "Choose Avatar";
   static const String readyToFocus = "Ready to focus";
   static const String description = "Description...";
   static const String taskPriority = "Task Priority";

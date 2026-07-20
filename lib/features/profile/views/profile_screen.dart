@@ -5,9 +5,11 @@ import 'package:todo/core/services/auth_service.dart';
 import 'package:todo/core/routing/app_router.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
+import 'package:todo/features/profile/widget/dice_bear_avatar.dart';
 import 'package:todo/features/profile/model/profile_menu_item_data.dart';
 import 'package:todo/features/profile/model_view/profile_view_model.dart';
-import 'package:todo/features/profile/widget/profile_avatar.dart';
+import 'package:todo/features/profile/widget/change_avatar_screen.dart';
+import 'package:todo/features/profile/widget/initial_avatar.dart';
 import 'package:todo/features/profile/widget/profile_logout_button.dart';
 import 'package:todo/features/profile/widget/profile_section.dart';
 import 'package:todo/features/profile/widget/show_change_name.dart';
@@ -36,15 +38,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profileVm = context.watch<ProfileViewModel>();
     final taskVm = context.watch<TaskViewModel>();
 
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
+    return SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfileAvatar(radius: 50),
+              profileVm.avatarSeed == null
+            ? InitialAvatar(
+                radius: 50,
+                backgroundColor: profileVm.avatarColor,
+              )
+            : DiceBearAvatar(
+                seed: profileVm.avatarSeed!,
+                radius: 50,
+                backgroundColor: profileVm.avatarColor,
+              ),
               const SizedBox(height: 16),
 
               Text(
@@ -84,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.settings_outlined,
                     title: 'App Settings',
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.appSettings);
+                      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.appSettings, (route) => false);
                     },
                   ),
                 ],
@@ -116,9 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.image_outlined,
                     title: 'Change account image',
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.changeAccountImage,
+                      showDialog(
+                        context: context,
+                        builder: (_) => const ChangeAvatarScreen(),
                       );
                     },
                   ),
@@ -175,7 +184,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

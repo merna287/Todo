@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/core/constants/app_assets.dart';
 import 'package:todo/core/constants/app_strings.dart';
 import 'package:todo/core/theme/app_colors.dart';
 import 'package:todo/core/theme/app_text_styles.dart';
+import 'package:todo/features/profile/model_view/profile_view_model.dart';
 import 'package:todo/features/profile/views/profile_screen.dart';
-import 'package:todo/features/profile/widget/profile_avatar.dart';
+import 'package:todo/features/profile/widget/initial_avatar.dart';
+import 'package:todo/features/profile/widget/dice_bear_avatar.dart';
 import 'package:todo/features/home/calendar/presentation/view/calendar_screen.dart';
 import 'package:todo/features/focus/presentation/view/focus_mode_screen.dart';
 import 'package:todo/features/home/presentation/view/home_screen.dart';
@@ -21,7 +24,7 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
+  final List<Widget> _screens = const [
     HomeScreen(),
     CalendarScreen(),
     FocusModeScreen(),
@@ -45,12 +48,27 @@ class _MainLayoutState extends State<MainLayout> {
     return null;
   }
 
-  List<Widget>? _buildActions() {
+  List<Widget>? _buildActions(BuildContext context) {
+    final profileVm = context.watch<ProfileViewModel>();
+
     if (_currentIndex == 0) {
-      return const [
-        Padding(padding: EdgeInsets.only(right: 12), child: ProfileAvatar(radius: 20)),
+      return [
+        Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: profileVm.avatarSeed == null
+              ? InitialAvatar(
+                  radius: 20,
+                  backgroundColor: profileVm.avatarColor,
+                )
+              : DiceBearAvatar(
+                  seed: profileVm.avatarSeed!,
+                  radius: 20,
+                  backgroundColor: profileVm.avatarColor,
+                ),
+        ),
       ];
     }
+
     return null;
   }
 
@@ -73,12 +91,13 @@ class _MainLayoutState extends State<MainLayout> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         leading: _buildLeading(),
         title: Text(
           _titles[_currentIndex],
           style: AppTextStyles.regular20.copyWith(color: AppColors.whiteColor),
         ),
-        actions: _buildActions(),
+        actions: _buildActions(context),
       ),
       body: _screens[_currentIndex],
       floatingActionButton: SizedBox(
@@ -101,7 +120,7 @@ class _MainLayoutState extends State<MainLayout> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
+    
       bottomNavigationBar: BottomAppBar(
         color: AppColors.mediumGrey,
         shape: const CircularNotchedRectangle(),
@@ -153,9 +172,9 @@ class _MainLayoutState extends State<MainLayout> {
                   ],
                 ),
               ),
-
+    
               SizedBox(width: 64),
-
+    
               GestureDetector(
                 onTap: () {
                   setState(() {

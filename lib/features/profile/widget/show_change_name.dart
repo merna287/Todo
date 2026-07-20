@@ -32,35 +32,54 @@ class _ShowChangeNameState extends State<ShowChangeName> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<ProfileViewModel>();
-    return AlertDialog(
+    return Dialog(
       backgroundColor: AppColors.mediumGrey,
-      title: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          Text(AppStrings.changeAccountName, style: TextStyle(color: Colors.white)),
-          SizedBox(height: 12),
-          Divider(color: Colors.white24, thickness: 1, height: 1),
-        ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      content: TextFormFieldWidget(
-            hint: AppStrings.enterNewName,
-            color: AppColors.lightGrey2,
-            controller: controller,
-            myValidator: ValidatorApp.validateName,
-          ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text(AppStrings.cancel),
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              AppStrings.changeAccountName,
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            const SizedBox(height: 12),
+            const Divider(color: Colors.white24),
+
+            const SizedBox(height: 12),
+
+            TextFormFieldWidget(
+              hint: AppStrings.enterNewName,
+              color: AppColors.lightGrey2,
+              controller: controller,
+              myValidator: ValidatorApp.validateName,
+            ),
+
+            const SizedBox(height: 15),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(AppStrings.cancel),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  onPressed: () {
+                    viewModel.updateProfile(controller.text, '', '');
+                    Navigator.pop(context);
+                  },
+                  child: const Text(AppStrings.edit),
+                ),
+              ],
+            ),
+          ],
         ),
-        FilledButton(
-          onPressed: () {
-            viewModel.updateName(controller.text);
-            Navigator.pop(context);
-          },
-          child: const Text(AppStrings.edit),
-        ),
-      ],
+      ),
     );
   }
 }
